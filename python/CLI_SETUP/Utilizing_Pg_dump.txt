@@ -1,0 +1,49 @@
+When you install the standard PostgreSQL client on a Unix machine, you also get access to the pg_dump utility. Interfacing with this tool will allow us to easily get backups from a PostgreSQL database. In this lesson, we'll learn how to interact with processes external to Python so that we can trigger a pg_dump.
+
+Documentation for This Video
+The subprocess package - https://docs.python.org/3/library/subprocess.html
+The subprocess.Popen class - https://docs.python.org/3/library/subprocess.html#subprocess.Popen
+The sys.exit function - https://docs.python.org/3/library/sys.html#sys.exit
+
+Interacting with Subprocesses
+The pg_dump utility is great for interacting with PostgreSQL databases so we're going to interact with the tool directly from within our code using the subprocess package. Since we're building a thin wrapper for the pg_dump utility, we're going to put this code into a pgdump.py file:
+
+src/pgbackup/pgdump.py
+
+import subprocess
+
+def dump(url):
+    return subprocess.Popen(['pg_dump', url], stdout=subprocess.PIPE)
+Remembering back to the desired UX for our tool, we're expecting to receive a URL for the database, so we're writing a function that will receive this URL. Thankfully, pg_dump can also receive a URL, so we build a list of tokens to build up the external command to run. We're utilizing subprocess.PIPE to capture Stdout into a file-like object and prevent it from being written to the terminal when we run this code.
+
+This first draft is pretty simple, but there's no guarantee that it will always succeed, so we need to add some error handling.
+
+Implementing Error Handling
+The subprocess.Popen can raise an OSError so we're going to wrap that call in a try block, print the error message, and use sys.exit to set the error code.
+
+src/pgbackup/pgdump.py
+
+import sys
+import subprocess
+
+def dump(url):
+    try:
+        return subprocess.Popen(['pg_dump', url], stdout=subprocess.PIPE)
+    except OSError as err:
+        print(f"Error: {err}")
+        sys.exit(1)
+By using try and except we can ensure that the Python stack trace won't be printed out in the terminal of the person using this project if pg_dump happens to not be installed.
+
+Manual Testing
+Now that we've implemented our subprocess interaction, we'll take a moment to ensure that it actually works. We can load our entire project into the Python REPL by setting the PYTHONPATH environment variable to be our ./src directory:
+
+(pgbackup) $ PYTHONPATH=./src python
+>>> from pgbackup import pgdump
+>>> dump = pgdump.dump('postgres://demo:password@54.245.63.9:80/sample')
+>>> f = open('dump.sql', 'w+b')
+>>> f.write(dump.stdout.read())
+>>> f.close()
+Note: We needed to open our dump.sql file using the w+b flag because we know that the .stdout value from a subprocess will be a bytes object and not a str.
+
+If we exit and take a look at the contents of the file using cat, we should see the SQL output. With the pgdump module 
+implemented, it's now a great time to commit our code.

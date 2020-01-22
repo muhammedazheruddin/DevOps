@@ -501,3 +501,14 @@ vim BuildingCLI.txt
 cd ..
 git init
 ls
+git add --all
+git status
+git commit -m "LinuxAcademy Commit"
+git push
+git remote add origin https://github.com/muhammedazheruddin/DevOps.git
+it push -u origin master
+git push -u origin master
+cd python/CLI_SETUP/
+nano Utilizing_Pg_dump.txt
+git add --all
+cd ~/
