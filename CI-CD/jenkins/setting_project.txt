@@ -1,0 +1,4 @@
+Jenkins projects are at the core of doing any kind of automation in Jenkins. The CI process for an application is generally configured in Jenkins as a Jenkins project. This lesson will introduce the concept of Jenkins projects. It will also demonstrate how to set up a freestyle project that pulls application source code from GitHub and executes build automation against it. After completing this lesson, you will know how to configure a simple freestyle project in Jenkins.
+
+
+If you want to follow along, here is the source code for the train-schedule application used in the demo: https://github.com/linuxacademy/cicd-pipeline-train-schedule-jenkins

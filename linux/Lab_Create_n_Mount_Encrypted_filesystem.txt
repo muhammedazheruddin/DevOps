@@ -1,0 +1,76 @@
+		Create and Mount an Encrypted Filesystem
+Introduction
+One of the developers in your organization is going to be working on a server with sensitive data that is covered by various compliance regulations. Your corporate security policy states that user information must be on encrypted partitions.
+
+You have been provided with credentials and connection information for a new instance that will be used for this work. You will be creating a new partition from an additional disk provisioned to this system, 20 GB in size. Once you create the partition, you will need to take steps to secure the contents that will be placed on it.
+
+Using the appropriate encryption steps, you will format the filesystem and provide the necessary configuration commands to make it available with the right encryption/decryption commands. This will NOT be mounted on boot, it will need to remain a manual mount/decryption process. The developer has asked for the mount point to be a directory called /mnt/enc_fs. Once you verify the encryption and decryption works and protect the filesystem, you can turn it over for the development team.
+
+Solution
+Begin by logging in to the lab server using the credentials provided on the hands-on lab page:
+
+ ssh cloud_user@PUBLIC_IP_ADDRESS
+Become the root user:
+
+ sudo su -
+Partition Created for Use as Encrypted Filesystem
+Verify that the server has the support needed to install an encrypted filesystem:
+
+ grep -i config_dm_crypt /boot/config-$(uname -r)
+Install the necessary packages:
+
+ yum install cryptsetup vim
+View the device names available to the system:
+
+ lsblk
+Create the necessary partition:
+
+ fdisk /dev/xvdg
+Answer the following prompts:
+
+ Command (m for help): n
+ Partition Type: p
+ Partition number (1-4, default 1): Press Enter to accept the default
+ First sector: Press Enter to accept the default
+ Last sector: Press Enter to accept the default
+ Command: p
+ Command: w
+Use cryptsetup to encrypt that device:
+
+ cryptsetup -y luksFormat /dev/xvdg1
+Answer the following prompts:
+
+ Are you sure: YES
+ Enter passphrase: linux academy & cloud assessments
+ Verify passphrase: linux academy & cloud assessments
+Open the encrypted partition:
+
+ cryptsetup luksOpen /dev/xvdg1 mySecret
+Enter the passphrase:
+
+ linux academy & cloud assessments
+Format the partition:
+
+mkfs -t ext4 /dev/mapper/mySecret
+Mount Point for Filesystem and Mounted
+Create a mountpoint:
+
+ mkdir /mnt/enc_fs
+Mount the filesystem:
+
+ mount /dev/mapper/mySecret /mnt/enc_fs
+Verify:
+
+ ls -la /mnt/enc_fs
+Test adding a file:
+
+ touch /mnt/enc_fs/test.txt
+Conclusion
+Congratulations — you've completed this hands-on lab!
+
+Additional Information and Resources
+One of the developers in your organization is going to be working on a server with sensitive data that is covered by various compliance regulations. Your corporate security policy states that user information must be on encrypted partitions.
+
+You have been provided with credentials and connection information for a new instance that will be used for this work. You will be creating a new partition from an additional disk provisioned to this system, 20 GB in size. Once you create the partition, you will need to take steps to secure the contents that will be placed on it.
+
+Using the appropriate encryption steps, you will format the filesystem and provide the necessary configuration commands to make it available with the right encryption/decryption commands. This will NOT be mounted on boot, it will need to remain a manual mount/decryption process. The developer has asked for the mount point to be a directory called /mnt/enc_fs. Once you verify the encryption and decryption works and protect the filesystem, you can turn it over for the development team.

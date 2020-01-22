@@ -1,0 +1,44 @@
+iComposition works really well for allowing us to reuse code, and one of the other things that it allows us to do is swap out the dependencies that we pass in. This process works because of the idea of polymorphism. In this lesson, we'll learn what polymorphism is and how it's used.
+
+Documentation For This Video
+Classes
+What is Polymorphism?
+Polymorphism is a pretty strange word that gets used fairly often when talking about object-oriented programming. Thankfully, the concept of polymorphism isn't as complicated as the name would imply. Our Car class is currently taking in a list of Tire objects, but do they need to be Tire instances? Let's take a look at every interaction with the tire instances that happens within the Car class's implementation:
+
+~/learning_python/creating_classes.py
+
+class Car:
+    """
+    Car models a car w/ tires and an engine
+    """
+
+    def __init__(self, engine, tires):
+        self.engine = engine
+        self.tires = tires
+
+    def description(self):
+        print(f"A car with a {self.engine} engine, and {self.tires} tires")
+
+    def wheel_circumference(self):
+        if len(self.tires) > 0:
+            return self.tires[0].circumference()
+        else:
+            return 0
+We interact with the tires in two spots:
+
+When printing in the description method
+By calling the circumference method within wheel_circumference
+If instead of Tire instances we used strings for the tires attribute, then we would run into issues because the str type doesn't have a circumference method. Since variables aren't statically typed in Python (they aren't bound to one specific type) the only thing that we need to do to have our Car class work is to pass in tires that meet these requirements:
+
+They can be printed
+They implement the circumference method
+This is polymorphism. It's the idea that we can make different data structures work together so long as the method requirements between them are met. It means that we can pass SnowTire instances into a Car class where we were currently using Tire instances, and there would be no errors or issues.
+
+$ python3.7 -i creating_classes.py
+>>> from tire import SnowTire
+>>> tire = SnowTire('P', 205, 65, 15, 2)
+>>> tires = [tire, tire, tire, tire]
+>>> honda = Car(tires=tires, engine='4-cylinder')
+>>> honda.wheel_circumference()
+92.7 Technically, we could create a class called Circle that also implements a circumference method, and that would 
+also work as a "tire" because of polymorphism.

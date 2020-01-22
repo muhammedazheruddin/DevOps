@@ -1,0 +1,123 @@
+In order to manage the complexity of a system that is able to support a CI/CD process, it is critical to have visibility into that system. Monitoring tools provide access to important data that can help you maintain stability in the context of a high rate of change.
+This lesson introduces the concept of monitoring and gives you a basic understanding of its goals. It also introduces Prometheus and Grafana, the two monitoring tools that will be used in this course.
+
+
+For more information about these monitoring tools, check out their official sites:
+
+Prometheus - https://prometheus.io/
+Grafana - https://grafana.com/
+
+
+
+Lecture: Installing Prometheus and Grafana
+
+The first step toward using Prometheus and Grafana to gather metrics within Kubernetes is to install them. This video walks you through the process of installing Prometheus and Grafana in your Kubernetes cluster. After completing this lesson, you will know how to quickly install Prometheus and Grafana using Helm.
+
+Since there are quite a few commands involved in this installation, here is a reference guide for the commands used to perform the installation in this lesson:
+
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > /tmp/get_helm.sh
+chmod 700 /tmp/get_helm.sh
+DESIRED_VERSION=v2.8.2 /tmp/get_helm.sh
+helm init --wait
+kubectl --namespace=kube-system create clusterrolebinding add-on-cluster-admin --clusterrole=cluster-admin --serviceaccount=kube-system:default
+helm ls
+cd ~/
+git clone https://github.com/kubernetes/charts
+cd charts
+git checkout efdcffe0b6973111ec6e5e83136ea74cdbe6527d
+cd ../
+vi prometheus-values.yml
+prometheus-values.yml:
+
+alertmanager:
+    persistentVolume:
+        enabled: false
+server:
+    persistentVolume:
+        enabled: false
+
+Then run:
+
+helm install -f prometheus-values.yml charts/stable/prometheus --name prometheus --namespace prometheus
+vi grafana-values.yml
+grafana-values.yml:
+
+
+adminPassword: password
+
+Then run:
+
+helm install -f grafana-values.yml charts/stable/grafana/ --name grafana --namespace grafana
+
+vi grafana-ext.yml
+grafana-ext.yml:
+
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: grafana
+  name: grafana-ext
+spec:
+  type: NodePort
+  selector:
+    app: grafana
+  ports:
+  - protocol: TCP
+    port: 3000
+    nodePort: 8080
+
+Then run:
+
+kubectl apply -f grafana-ext.yml
+
+You can check on the status of the prometheus and grafana pods with these commands:
+
+kubectl get pods -n prometheus
+kubectl get pods -n grafana
+
+check the service installed on public IP at port 8080
+
+When setting up your dastasource in grafana, use this url:
+
+http://prometheus-server.prometheus.svc.cluster.local
+
+
+
+===========================
+Lecture: Cluster Monitoring
+===========================
+
+One of the important ways that monitoring can help you maintain stability in the context of Kubernetes is monitoring of the Kubernetes cluster itself. Fortunately, there is a ready-made community dashboard that can be easily imported into your grafana installation to quickly get some insight into the performance and stability of your cluster. In this lesson, you will learn how to import the Kubernetes All Nodes community dashboard in order to set up cluster monitoring for your Kubernetes cluster.
+
+You can find additional community dashboards here: https://grafana.com/dashboards
+
+Check here for more info on the Kubernetes All Nodes dashboard: https://grafana.com/dashboards/3131
+
+
+
+
+
+===============================
+Lecture: Application Monitoring
+===============================
+In additional to monitoring the health of your cluster, it is also important to monitor metrics about the applications themselves. This video discusses the basics of what it takes to get metric data from applications into Prometheus, as well as how to build custom Grafana dasboards on top of that data.
+
+Here is the sample source code for the train schedule app that was used in the demo: https://github.com/linuxacademy/cicd-pipeline-train-schedule-monitoring
+
+And here is a direct link to the Kubernetes template yml file that was used to deploy the app: https://github.com/linuxacademy/cicd-pipeline-train-schedule-monitoring/blob/master/train-schedule-kube.yml
+
+Metrics Query:
+
+sum(rate(http_request_duration_ms_count[2m])) by (service, route, method, code)
+
+
+
+
+================
+Alerting
+================
+
+While monitoring is a powerful way to gain insight into applications and infrastructure, alerts provide the ability to act on that information immediately when problems arise. This lesson will show you what it looks like to set up alerts in Grafana using data from your dashboards. After completing this lesson, you will have a basic understanding of what is involved in setting up Grafana alerts.
+
+Check out the Grafana documentation on alerting for more info: http://docs.grafana.org/alerting/rules/.
+

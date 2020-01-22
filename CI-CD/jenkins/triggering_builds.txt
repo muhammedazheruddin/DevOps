@@ -1,0 +1,5 @@
+One of the most important aspects of a good CI process is quick feedback whenever there is a change. This means that it is important to execute builds as soon as possible after a code change is pushed to source control. One of the best ways to do this with GitHub and Jenkins is to use webhooks to have GitHub notify Jenkins when there is a change so that Jenkins can automatically start the build.
+This lesson will demonstrate how to configure webhooks from GitHub to Jenkins. After completing the lesson, you should be able to configure Jenkins to automatically execute a build whenever there is a code change in GitHub.
+
+
+If you want to follow along, here is the source code for the train schedule application used in the demo: https://github.com/linuxacademy/cicd-pipeline-train-schedule-jenkins

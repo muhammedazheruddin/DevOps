@@ -1,0 +1,7 @@
+So far, you have learned how to implement a deployment of an app directly to a server using a Jenkine Pipeline. Now that you have learned how to dockerize the app, it is time to dockerize the CD process as well.
+This lesson will discuss one way we can configure a Jenkins pipeline to deploy a dockerized app as a contained. This lesson demonstrates how to build a Jenkins pipeline that builds the app as a Docker image, puhes the image to a registry, pulls the image to the production server, and deploys the app as a container on the production server.
+After completing this lesson, you will be able to apply the concepts of Jenkins pipeline automation to a dockerized app.
+
+
+You can find the source code of the train-schedule app here: https://github.com/linuxacademy/cicd-pipeline-train-schedule-dockerdeploy
+

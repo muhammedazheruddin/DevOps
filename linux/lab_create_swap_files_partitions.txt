@@ -1,0 +1,18 @@
+Scenario
+Your development team is working on a new Web-based API for the organization. They are trying to determine a Java-based tool for some memory profiling of their application on memory constrained systems and how it may react when needing additional swap space when memory is depleted. As a result, you have been provided with credentials and connection information to one of their test systems. This is a memory constrained server that has no swap file and is therefore insufficient for their testing. You have been asked to create a swap file of 512mb in size. This swap file should be created as the 'root' user and exist in the /root directory, please name the swap file 'extraswap.swp' and be sure that the file has the proper permissions to enable. Finally, enable the swap file and configure the system so that it is available on reboot.
+
+Additional Information and Resources
+Your development team is working on a new Web-based API for the organization. They are trying to determine a Java based tool for some memory profiling of their application on memory constrained systems and how it may react when needing additional swap space when memory is depleted.
+
+As a result, you have been provided with credentials and connection information to one of their test systems. This is a memory constrained server that has no swap file and is therefore insufficient for their testing.
+
+You have been asked to create a swap file of 512mb in size. This swap file should be created as the 'root' user and exist in the /root directory, please name the swap file 'extraswap.swp' and be sure that the file has the proper permissions to enable. Finally, enable the swap file and configure the system so that it is available on reboot.
+
+Creating the Swap File
+keyboard_arrow_up
+The student is asked to create the swap file. Creating a 512mb swap file will involve using the 'dd' utility and filling the file with zero (which the /dev/zero special device file is used for). This swap file should exist in /root and be called 'extraswap.swp'.
+
+Swap File Permissions Set Correctly
+keyboard_arrow_up
+The swap file must have a minimum of 0644 permissions, but a recommended 0600 in order to be enabled with the 'mkswap' and 'swapon' commands.
+

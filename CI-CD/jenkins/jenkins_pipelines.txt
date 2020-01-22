@@ -1,0 +1,5 @@
+Jenkins is a great CI tool, but it is also powerful component of continuous deployment. Jenkins Pipelines is a suite of official Jenkins plugins which support CD functionality. This lesson introduces Jenkins Pipelines and gives a quick overview of what it looks like to create and execute a pipeline.
+After completing this lesson, you should have a basic understanding of what Jenkins Pipelines is, and you should be ready to begin learning how to implement one.
+
+
+For more information on Jenkins Pipelines, check out the official documentation: https://jenkins.io/doc/book/pipeline/

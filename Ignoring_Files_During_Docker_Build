@@ -1,0 +1,37 @@
+#Ignoring_Files_During_Docker_Build
+#man dpkg
+#dpkg -i <nameof package>
+#dpkg -l <listpckages>
+
+#aptit
+#sudo apt-get update
+#sudo apt-get autoremove
+
+ssh <username>@<serverIP>
+Password:
+
+docker ps
+cd content-dockerquest-spacbones/salt-example/salt-master/
+ls
+cat Dockerfile
+
+clear
+vim .dockerignore
+
+
+#
+badscript.sh
+*.conf
+README.md
+
+
+:Wq!
+Save&Close
+
+docker build -t salt-master:deb .
+
+docker images
+
+
+
+

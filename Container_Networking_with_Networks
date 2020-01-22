@@ -1,0 +1,26 @@
+#Container_Networking_with_Networks
+ssh <cloud_user>@<serverIP>
+password:
+
+docker ps
+
+docker network ls
+
+docker network inspect bridge
+
+clear
+
+docker network create --driver=bridge --subnet=192.168.10.0/24 \
+> --gateway=192.168.10.250 borkspace
+
+
+docker network ls
+
+docker network inspect borkspace
+
+clear
+
+docker run -it --name treattransfer --network=borkspace spacebones/nyancat
+
+#ctrl+c to cancel the image
+

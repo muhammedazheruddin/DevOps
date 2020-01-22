@@ -1,0 +1,18 @@
+#Container_Networking_with_Links
+ssh <cloud_user>@<serverIP>
+password:
+
+docker ps
+
+docker run -d -p 80:80 --name spacebones spacebones/spacebones:thewebsite
+clear
+docker ps
+
+docker run -d -P --name treatlist --link spacebones: spacebones spacebones/postgres
+
+clear
+docker ps
+docker inspect -f "{{ .HostConfig.Links }}" treatlist
+
+
+

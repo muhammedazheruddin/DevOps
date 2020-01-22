@@ -1,0 +1,62 @@
+Now that we have explored the implementation of CI and automated deployment, we are ready to start thinking about deploying frequently. But in order to provide stability in the context of this high rate of change, we need robust tools for managing our infrastructure. This lesson introduces orchestration and how we can use it in the context of a CI/CD Pipeline. It also introduces Kubernetes, the orchestration tool we will be using in this course.
+After completing this lesson, you will have an understanding of what what we are trying to accomplish by deploying our application to Kubernetes and why that is important.
+
+
+Be sure to check out kubernetes.io for more information on Kubernetes!
+
+
+
+
+Ceating Kubernetes Cluster
+=====================================
+
+In order to use Kubernetes, you need to create a Kubernetes cluster. This lesson discusses how to do this and demonstrates setting up a simple cluster with one master and one node using kubeadm. After completing this lesson, you will be able to create a simple Kubernetes cluster that you can deploy applications to.
+
+
+You can find instructions on various ways of installing Kubernetes here: https://kubernetes.io/docs/setup/
+
+
+Installation instructions specific to kubeadm can he found here: https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+
+
+==========KubernetesBasics=============
+
+
+You can initialize the master node in kubeadm by creating a config file called kube-config.yml with these contents:
+
+
+apiVersion: kubeadm.k8s.io/v1alpha3
+kind: ClusterConfiguration
+networking:
+  podSubnet: 10.244.0.0/16
+apiServerExtraArgs:
+  service-node-port-range: 8000-31274
+Then run this command referencing that file:
+kubeadm init --config kube-config.yml
+Use this command to set up a pod network after initializing the master with kubeadm init:
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
+
+In order to use Kubernetes in the context of a CI/CD Pipeline, it is important to understand tha basics of how Kubernetes works and what it does. In this lesson, we will discuss some of the essential Kubernetes terminology, such as clusters, master, nodes, pods, and services. We will also discuss Kubernetes deployments and how they can help us to achieve stability when doing continuous deployment.
+
+
+You can find more detailed documentation on some of the concepts discussed in this lesson here: https://kubernetes.io/docs/concepts/#kubernetes-objects
+
+==================Deploying Kubernetes using Jenkins=====================================================
+
+
+
+Now that we have learned the basics of setting up and using a Kubernetes cluster, we are ready to integrate that knowledge with the CD process we have built using Jenkins Pipelines. In this lesson, you will learn how to deploy a Dockerized application to a Kubernetes cluster as part of a Jenkins Pipelines CD process.
+
+
+This demonstration uses the Kubernetes Continuous Deploy plugin to deploy to Kubernetes from Jenkins. You can find additional documentation about that plugin here: https://jenkins.io/doc/pipeline/steps/kubernetes-cd.
+
+
+If you want to follow along, you can find the sample source code here: https://github.com/linuxacademy/cicd-pipeline-train-schedule-kubernetes.
+
+
+Be sure to check out the example solution branch for the code that was used to complete the demo.
+
+
+
+

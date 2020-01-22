@@ -1,0 +1,4 @@
+docker images
+docker pull spacebones/doge
+docker run -d --name treatseekers -p 80:80 spacebones/doge
+<Public IP>

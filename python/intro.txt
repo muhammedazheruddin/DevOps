@@ -1,0 +1,4 @@
+Python is one of the most versatile and widely used programming languages that exists today. Whether you're working in server administration, web development, or data science you've likely interacted with a tool written in Python or been asked to write some Python yourself. This course is designed to give you a solid foundation to write code in Python with confidence. Throughout the course, we'll take you from "Hello, World!" to writing a Markdown-based note-taking web application and much more.
+
+
+It's important for you to understand the tools and resources available to you as a Linux Academy student. This video will cover the course features used by this course and other tools you have at your disposal, such as flash cards and course schedules.

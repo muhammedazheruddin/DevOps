@@ -1,0 +1,141 @@
+Working with Logical Volume Manager (LVM) Partitions
+Introduction
+Storage management is a constant challenge in any enterprise environment. The ability to react quickly to increasing storage needs without disrupting the current configuration is key. In this hands-on lab, we will cover how to assemble larger filesystems from several smaller ones using fdisk, mkfs, pvcreate, lvcreate, vgcreate, and other LVM (Logical Volume Manager) storage utilities. These partitions will allow effective storage management by allowing filesystem growth.
+
+Solution
+Log in to the lab server using the credentials provided:
+
+ssh cloud_user@<PUBLIC IP ADDRESS>
+Create Data Volume Mount Point
+Take a look at what we currently have:
+
+df -h
+Check out the devices we have:
+
+lsblk
+Escalate privileges:
+
+sudo su
+Install LVM and Nano:
+
+yum install lvm2 nano
+Make mount point:
+
+mkdir -p /mnt/datavol
+Format the Disks
+Format /dev/xvdf
+Begin formatting the disks:
+
+fdisk /dev/xvdf
+At the prompt, enter n to create a new partition.
+
+At the prompt, enter p for primary.
+
+Hit Enter to accept the default of 1.
+
+Hit Enter to accept the First sector and Last sector defaults.
+
+At the prompt, enter t to set the type.
+
+Enter 8e.
+
+At the prompt, enter p to print it out.
+
+At the prompt, enter w to write it out.
+
+Format /dev/xvdg
+Format the disk:
+
+fdisk /dev/xvdg
+Enter n to create a new partition.
+
+Enter p for primary.
+
+Hit Enter to accept the default of 1.
+
+Hit Enter to accept the First sector and Last sector defaults.
+
+Enter t to set the type.
+
+Enter 8e.
+
+Enter p to print it out.
+
+Enter w to write it out.
+
+Format /dev/xvdj
+Format the disk:
+
+fdisk /dev/xvdj
+Enter n to create a new partition.
+
+Enter p for primary.
+
+Hit Enter to accept the default of 1.
+
+Hit Enter to accept the First sector and Last sector defaults.
+
+Enter t to set the type.
+
+Enter 8e.
+
+Enter p to print it out.
+
+Enter w to write it out.
+
+Create Volumes
+Create physical volumes:
+
+pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdj1
+Create volume group:
+
+vgcreate datavol-agg /dev/xvdf1 /dev/xvdg1 /dev/xvdj1
+Create logical volume:
+
+lvcreate --name diskset --size 59G datavol-agg
+View logical volume:
+
+lvdisplay
+Write filesystem:
+
+mkfs -t ext4 /dev/datavol-agg/diskset
+Mount filesystem:
+
+mount /dev/datavol-agg/diskset /mnt/datavol
+Edit the contents of /etc/fstab:
+
+nano /etc/fstab
+To make sure it automatically mounts on reboot, enter the following in the file:
+
+/dev/datavol-agg/diskset /mnt/datavol ext4 default 0 2
+Save and quit the file.
+
+Conclusion
+Congratulations on successfully completing this hands-on lab!
+
+
+Additional Information and Resources
+The development team in your organization is working on a new Web-based API. One of their development workstations is going to be used to aggregate a large amount of data.
+
+Although the server currently has another 60gb of unallocated storage space, the data aggregation software can only be configured to look for data in ONE location (directory) and cannot handle hard or soft links. Additionally, there will likely be a future need for more storage but it will have to be added to the existing structure.
+
+You have decided that you can provide that level of flexibility by combining those devices into a pool of storage aggregated together using the Logical Volume Manager tools. You have been provided credentials and access information to this server.
+
+They have asked for this 60gb of space to be allocated in the directory called /mnt/datavol and be persistent (i.e. available after a reboot without manual remounting). Once you have this configured you can turn it back over for their use.
+
+Following are the commands used in the solution of the video:
+
+sudo su
+yum install lvm2
+mkdir -p /mnt/datavol
+fdisk /dev/xvdf
+fdisk /dev/xvdg
+fdisk /dev/xvdj
+pvcreate /dev/xvdf1 /dev/xvdg1 /dev/xvdj1
+vgcreate datavol-agg /dev/xvdf1 /dev/xvdg1 /dev/xvdj1
+lvcreate --name diskset --size 59G datavol-agg
+lvdisplay
+mkfs -t ext4 /dev/datavol-agg/diskset
+mount /dev/datavol-agg/diskset /mnt/datavol
+nano /etc/fstab
+/dev/datavol-agg/diskset /mnt/datavol ext4 default 0 2

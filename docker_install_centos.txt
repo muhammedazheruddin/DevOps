@@ -1,0 +1,24 @@
+docker pull centos:6
+docker images
+docker run -it centos:6 /bin/bash
+
+//inside conainer
+yum -y update
+clear
+install 
+yum -y install httpd git
+git clone https://github.com/linuxacademy/content-dockerquest-spacebones
+cp content-dockerquest-spacebones/doge/* /var/www/html/
+mv /etc/httpds/conf.d/welcome.conf /etc/httpd/conf.d/welcome.bak
+clear
+chkconfig httpd on
+exit
+//back to docker
+docker ps -a
+clear
+docker commit <UID> spacebones:thewebsite
+
+//UID=a711689ad014
+
+logout //logout from docker to linux machine
+

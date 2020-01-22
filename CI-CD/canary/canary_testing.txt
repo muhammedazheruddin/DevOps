@@ -1,0 +1,28 @@
+Canary testing can be a great way to build confidence in your CI/CD pipeline. It offers a way to examine the performance of new code under real-world usage while minimizing the immediate impact of problems introduced by the new code.
+In this lesson, you will learn what canary testing is and how it works. This will prepare you for the following lessons, which will show you how to implement basic canary testing with Jenkins Pipelines and Kubernetes.
+
+
+In order to implement canary testing in Kubernetes, you need to have a basic idea of how to orchestrate canary pods alongside normal pods within Kubernetes itself. This video will show you how to implement this by demonstrating how to set up a canary deployment manually. This will prepare for the next lesson, which will show how this process can be automated as part of a CI/CD pipeline in Jenkins.
+
+You can find the sample source code that was used in this demo here: https://github.com/linuxacademy/cicd-pipeline-train-schedule-canary
+
+
+Be sure to check out the example-solution branch to find the canary deployment template in train-schedule-kube-canary.yml.
+
+
+Here are the commands used to deploy the stable and canary pods in the demo:
+
+cd ~/
+git clone 
+cd cicd-pipeline-train-schedule-canary/
+kubectl apply -f train-schedule-kube.yml
+vi train-schedule-kube-canary.yml
+kubectl apply -f train-schedule-kube-canary.yml
+
+
+The orchestration functionality provided by Kubernetes is very useful in doing canary testing. Kubernetes can become even more powerful when paired with other automation tools such as Jenkins Pipelines. In this lesson, you will learn how to automate a canary deployment to a Kubernetes cluster as part of a Jenkins pipeline.
+
+
+Here is the sample source code used in the demo. Be sure to check out the example-solution branch for the final state of the code at the end of the demo: https://github.com/linuxacademy/cicd-pipeline-train-schedule-canary
+
+

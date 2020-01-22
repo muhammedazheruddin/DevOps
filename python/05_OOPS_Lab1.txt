@@ -1,0 +1,194 @@
+Modeling Data with Classes in Python
+Introduction
+Python is an object-oriented programming language, and lends itself to modeling problems using objects. In this hands-on lab, we'll be implementing a few different classes in order to create a todo list. The project has been documented with automated tests to help us verify that the code we've written will meet the requirements.
+
+By the time we're finished with this lab, we should be more comfortable creating classes and implementing methods on those classes.
+
+The Scenario
+We've been tasked with building a terminal based todo list application. It's moved past the prototype stage, and is now being modeled using classes. A co-worker has written and documented how each of the classes (Todo and TodoList) should behave. We'll need to implement all of the functions for each of the classes.
+
+Thankfully, our co-worker has provided doctests for these classes, to demonstrate how they should work. We have some automated tests that we can run, to ensure that our implementation meets the requirements. To run the tests, we'll use the following command from within the ~/tasker directory:
+
+$ python3.7 -m doctest -v tasker.py
+...
+2 items had failures:
+   5 of   5 in tasker.Todo
+   6 of   6 in tasker.TodoList
+***Test Failed*** 11 failures.
+$
+By the time we've implemented these classes, we'll have proven our knowledge of working with classes.
+
+Get logged in
+Use the credentials and server IP in the hands-on lab overview page to log into the server with SSH. Once we're in, get into the tasker directory with cd tasker.
+
+Implement the Todo Class
+The Todo class holds onto a few pieces of information:
+
+name: The name of the todo
+description: The description of the todo
+points: The difficulty/importance rating as an integer greater than zero
+completed: Whether or not the todo has been completed as a boolean
+Our first step will be to remove the pass line and implement the __init__ method:
+
+class Todo:
+    # doctest omitted
+
+    def __init__(self, name, description, points, completed=False):
+        self.name = name
+        self.description = description
+        self.points = points
+        self.completed = completed
+We only needed to specify one default for completed, and the rest of the arguments are required.
+
+Next, we'll need to customize how the object is printed out. We can do this by implementing either the __str__ method or the __repr__. The default implementation for __str__ will use __repr__. But since we also want our todos to represent themselves well when we just return them, we'll implement __repr__.
+
+class Todo:
+    # doctest and __init__ omitted
+
+    statuses = { False: 'Incomplete', True: 'Complete' }
+
+    def __repr__(self):
+        return f"{self.name} ({self.statuses[self.completed]} - {self.points} points): {self.description}"
+We've added a class level variable to allow us to convert the boolean value of completed into a readable string.
+
+With these two methods implemented, we have a working Todo class.
+
+Implement the TodoList Class
+The TodoList class only receives one argument and implements more functionality:
+
+todos: A list of Todo objects
+Our first step will be to remove the pass line and implement the __init__ method:
+
+class TodoList:
+    # doctest omitted
+
+    def __init__(self, todos):
+        self.todos = todos
+It doesn't get much simpler than that.
+
+Next, we need to implement the average_points function that will calculate the average of the points for all of the Todo objects. The formula for calculating the average is sum_of_points / number_of_todos, so let's write that now:
+
+class TodoList:
+    # doctest and __init__ omitted
+    def average_points(self):
+        total = 0
+        for todo in self.todos:
+            total += todo.points
+        return total / len(self.todos)
+Finally, we need to implement two methods that return subsets of our todos: the completed and incomplete methods. These methods will be almost exactly the same except we'll filter them with a different conditional:
+
+class TodoList:
+    # doctest and other methods omitted
+
+    def completed(self):
+        results = []
+        for todo in self.todos:
+            if todo.completed:
+                results.append(todo)
+        return results
+
+    def incomplete(self):
+        results = []
+        for todo in self.todos:
+            if not todo.completed:
+                results.append(todo)
+        return results
+With all of these methods implemented, we should have all of the doctests passing, and our classes working as expected.
+
+Conclusion
+We added functionality to a couple of classes that needed it, and the application is coming along nicely. Congratulations!
+
+
+Additional Information and Resources
+We've been tasked with building a terminal based todo list application. It's moved past the prototype stage, and is now being modeled using classes. A co-worker has written and documented how each of the classes (Todo and TodoList) should behave. We'll need to implement all of the functions for each of the classes.
+
+Thankfully, our co-worker has provided doctests for these classes, to demonstrate how they should work. We have some automated tests that we can run, to ensure that our implementation meets the requirements. To run the tests, we'll use the following command from within the ~/tasker directory:
+
+$ python3.7 -m doctest -v tasker.py
+...
+2 items had failures:
+   5 of   5 in tasker.Todo
+   6 of   6 in tasker.TodoList
+***Test Failed*** 11 failures.
+$
+By the time we've implemented these classes, we'll have proven our knowledge of working with classes.
+
+
+Learning Objectives
+check_circle
+Implement the `Todo` Class
+keyboard_arrow_up
+The Todo class holds onto a few pieces of information:
+
+name: The name of the todo
+description: The description of the todo
+points: The difficulty/importance rating as an integer greater than zero
+completed: Whether or not the todo has been completed as a boolean
+Our first step will be to remove the pass line and implement the __init__ method:
+
+class Todo:
+    # doctest omitted
+
+    def __init__(self, name, description, points, completed=False):
+        self.name = name
+        self.description = description
+        self.points = points
+        self.completed = completed
+We only needed to specify one default for completed, and the rest of the arguments are required.
+
+Next, we'll need to customize how the object is printed out. We can do this by implementing either the __str__ method or the __repr__. The default implementation for __str__ will use __repr__. But since we also want our todos to represent themselves well when we just return them, we'll implement __repr__.
+
+class Todo:
+    # doctest and __init__ omitted
+
+    statuses = { False: 'Incomplete', True: 'Complete' }
+
+    def __repr__(self):
+        return f"{self.name} ({self.statuses[self.completed]} - {self.points} points): {self.description}"
+We've added a class level variable to allow us to convert the boolean value of completed into a readable string.
+
+With these two methods implemented, we have a working Todo class.
+
+check_circle
+Implement the `TodoList` Class
+keyboard_arrow_up
+The TodoList class only receives one argument and implements more functionality:
+
+todos: A list of Todo objects
+Our first step will be to remove the pass line and implement the __init__ method:
+
+class TodoList:
+    # doctest omitted
+
+    def __init__(self, todos):
+        self.todos = todos
+It doesn't get much simpler than that.
+
+Next, we need to implement the average_points function that will calculate the average of the points for all of the Todo objects. The formula for calculating the average is sum_of_points / number_of_todos, so let's write that now:
+
+class TodoList:
+    # doctest and __init__ omitted
+    def average_points(self):
+        total = 0
+        for todo in self.todos:
+            total += todo.points
+        return total / len(self.todos)
+Finally, we need to implement two methods that return subsets of our todos: the completed and incomplete methods. These methods will be almost exactly the same except we'll filter them with a different conditional:
+
+class TodoList:
+    # doctest and other methods omitted
+
+    def completed(self):
+        results = []
+        for todo in self.todos:
+            if todo.completed:
+                results.append(todo)
+        return results
+
+    def incomplete(self):
+        results = []
+        for todo in self.todos:
+            if not todo.completed:
+                results.append(todo)
+        return results With all of these methods implemented, we should have all of the doctests passing, and our 
+classes working as expected.

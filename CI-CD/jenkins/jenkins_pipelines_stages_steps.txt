@@ -1,0 +1,9 @@
+The basic structure of a Jenkins pipeline consists of stages and steps. You need to be familiar with these concepts in order to build your own Jenkins pipelines.
+This lesson discusses these two concepts and walks you through a sample Jenkinsfile that uses a stage and a few steps to implement a CI build.
+After completing this lesson, you will be ready to proceed toward implementing more complex functionality within a Jenkins pipeline.
+
+
+When building Jenkins pipelines, you may need to consult the steps reference: https://jenkins.io/doc/pipeline/steps/
+
+
+Feel free to check out the sample Jenkinsfile used in the demo for this lesson: https://github.com/linuxacademy/cicd-pipeline-train-schedule-pipelines/blob/example-solution/Jenkinsfile

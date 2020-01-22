@@ -1,0 +1,23 @@
+#Creating_Data_Containers
+ssh <username>@<serverIP>
+password:
+
+docker ps
+docker create -v /data --name boneyard spacebones/postgres /bin/true
+
+clear
+docker ps
+docekr ps -a
+clear
+docker run -d --volumes-from boneyard --name cheese spacebones/postgres
+
+docker run -d --volumes-from boneyard --name tuna spacebones/postgres
+
+docker run -d --volumes-from boneyard --name bacon spacebones/postgres
+
+docker volume list
+
+docker inspect bacon
+
+
+

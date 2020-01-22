@@ -1,0 +1,7 @@
+In order to succeed with continuous delivery and continuous deployment, deployment automation is essential. In this lesson, we will be implementing automated deployments within a Jenkins pipeline. We will create pipeline stages to automatically deploy to a staging server and a production server. After completing this lesson, you will have some familiarity with how automated deployment can be implementing using Jenkins Pipelines.
+
+
+Check out the pipeline steps reference for the Publish Over SSH plugin used in the demo: https://jenkins.io/doc/pipeline/steps/publish-over-ssh/
+
+
+Here is the sample source code used in the demo. Check the example-solution branch for the complete Jenkinsfile: https://github.com/linuxacademy/cicd-pipeline-train-schedule-cd

@@ -1,0 +1,151 @@
+When our programs aren't behaving the way that we expect them to, then we need to start debugging. One of the common ways to do this is by simply adding print lines throughout our code, to see when something is run and/or what a variable's value is at a given point. But this isn't the only way to debug. In this lesson, we'll take a look at pdb, the debugger that ships with Python.
+
+Documentation For This Video
+The pdb module - https://docs.python.org/3/library/pdb.html
+The pdb.set_trace function - https://docs.python.org/3/library/pdb.html#pdb.set_trace
+The breakpoint function (Python > 3.7) - https://docs.python.org/3/library/functions.html#breakpoint
+
+Using a Debugger
+A debugger is a program that allows us to tie into our program while it's running. By doing this we can go through the code step by step to see where things are going wrong. This is commonly known as "breakpoint debugging." Python has its own debugger, the pdb module. This module will allow us to set breakpoints in our code using the set_trace function, and when this function is run we will be dropped into a Python prompt.
+
+Let's create a few new functions in debugging.py to test this out:
+
+~/learning_python/debugging.py
+
+import pdb
+
+def map(func, values):
+    output_values = []
+    index = 0
+    while index < len(values):
+        pdb.set_trace()
+        output_values = func(values[index])
+        index += 1
+    return output_values
+
+def add_one(val):
+    return val + 1
+Our map function takes in a function and a list of values and returns list with the result of applying the function to each value in the original list. There are plenty of better ways to do this in Python, but this gives us a useful function to work with. We've imported the pdb module. Within our loop, in map, we've called pdb.set_trace. Let's load up the REPL with this file and use it:
+
+$ python3.7 -i debugging.py
+>>> map(add_one, list(range(5)))
+> /home/cloud_user/learning_python/debugging.py(8)map()
+-> output_values = func(values[index])
+(Pdb)
+The (Pdb) signifies that we've hit the breakpoint. From here we can run Python code, and we can see the line directly after our breakpoint (so, it hasn't run yet). Let's interact with the state a little to see what's going on:
+
+(Pdb) values
+[0, 1, 2, 3, 4]
+(Pdb) index
+0
+(Pdb) output_values
+[]
+(Pdb)
+Now that we have a debugger running we're ready to see how to use it through debugger commands.
+
+Debugger Commands
+The debugger has its own commands that allow us to do various things while it is running. To see these commands we can enter h or help from within the prompt:
+
+(Pdb) h
+
+Documented commands (type help <topic>):
+========================================
+EOF    c          d        h         list      q        rv       undisplay
+a      cl         debug    help      ll        quit     s        unt
+alias  clear      disable  ignore    longlist  r        source   until
+args   commands   display  interact  n         restart  step     up
+b      condition  down     j         next      return   tbreak   w
+break  cont       enable   jump      p         retval   u        whatis
+bt     continue   exit     l         pp        run      unalias  where
+
+Miscellaneous help topics:
+==========================
+exec  pdb
+
+(Pdb) help cont
+c(ont(inue))
+        Continue execution, only stop when a breakpoint is encountered.
+(Pdb) help next
+n(ext)
+        Continue execution until the next line in the current function
+        is reached or it returns.
+Let's use the n command to execute the next line in our current context and then check the value of output_values:
+
+(Pdb) n
+> /home/cloud_user/learning_python/debugging.py(9)map()
+-> index += 1
+(Pdb) output_values
+1
+Here we can see that we have an issue on line 8 of our program, because we're reassigning output_values instead of appending to it.
+
+If we use the c, cont, or continue commands (all the same thing), then we'll execute our program until we get to the next breakpoint. Unfortunately, our breakpoint is in the loop so we'd hit it right away. Let's instead quit out of the debugger using q:
+
+(Pdb) q
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "debugging.py", line 9, in map
+    index += 1
+  File "debugging.py", line 9, in map
+    index += 1
+  File "/usr/local/lib/python3.7/bdb.py", line 88, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/usr/local/lib/python3.7/bdb.py", line 113, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit
+>>>
+The code should be pretty easy to fix, so let's do that now:
+
+~/learning_python/debugging.py
+
+def map(func, values):
+    output_values = []
+    index = 0
+    while index < len(values):
+        output_values.append(func(values[index]))
+        index += 1
+    return output_values
+
+def add_one(val):
+    return val + 1
+
+map(add_one, list(range(10)))
+We've added a call to map at the bottom of the file, so that we can take a look at how we would debug this without putting the pdb module into our code.
+
+Setting Breakpoints from Within Pdb
+Adding breakpoints to our code is one way to achieve what we want to do, but we could also run the code with the pdb module loaded into the Python interpreter when we run a script:
+
+$ python3.7 -m pdb debugging.py
+> /home/cloud_user/learning_python/debugging.py(1)<module>()
+-> def map(func, values):
+(Pdb)
+This placed us at the very beginning of the script. We can take a look at the source code by using the longlist or ll command:
+
+(Pdb) ll
+  1  -> def map(func, values):
+  2         output_values = []
+  3         index = 0
+  4         while index < len(values):
+  5             output_values.append(func(values[index]))
+  6             index += 1
+  7         return output_values
+  8
+  9     def add_one(val):
+ 10         return val + 1
+ 11
+ 12     map(add_one, list(range(10)))
+(Pdb)
+Now that we know all of the line numbers, we can add breakpoints using the break command, and make it so that our debugger will only stop if it hits one. Let's add a breakpoint to line 5, but only have it stop if index is exactly 5. After we've set the breakpoint, then we'll use c to run until we hit a breakpoint:
+
+(Pdb) break 5, index == 5
+Breakpoint 1 at /home/cloud_user/learning_python/debugging.py:5
+(Pdb) c
+> /home/cloud_user/learning_python/debugging.py(5)map()
+-> output_values.append(func(values[index]))
+(Pdb) index
+5
+(Pdb)
+Checking the value of index we can see that our conditional breakpoint worked. From here, we're able to step through the code line by line or simply continue on with the program. If the program continues and finished then the debugger will restart the program and we'll go back to the beginning.
+
+There's more that you can do with Pdb, but we can use the built-in help information and the documentation https://docs.python.org/3/library/pdb.html to learn more.wq
+
+

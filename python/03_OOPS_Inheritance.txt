@@ -1,0 +1,118 @@
+Composition is a very powerful tool for code reuse, but one of the other tools that we have at our disposal is inheritance. Inheritance allows us to create new classes that add or modify the behavior of existing classes. In this lesson, we'll create a different type of Tire.
+
+Documentation For This Video
+Classes
+Inheritance-https://docs.python.org/3.7/tutorial/classes.html#inheritance
+Using Inheritance to Customize an Existing Class
+Our existing Tire implementation does exactly what we need it to do for a general car tire, but there are other, more specific types of tires, such as racing slicks or snow tires. If we wanted to model these other types of tires, we could use our existing Tire class as a start by "inheriting" its existing implementation. Let's add a new SnowTire class to our tire.py file:
+
+~/learning_python/tire.py
+
+import math
+
+class Tire:
+    """
+    Tire represents a tire that would be used with an automobile.
+    """
+
+    def __init__(self, tire_type, width, ratio, diameter, brand='', construction='R'):
+        self.tire_type = tire_type
+        self.width = width
+        self.ratio = ratio
+        self.diameter = diameter
+        self.brand = brand
+        self.construction = construction
+
+    def circumference(self):
+        """
+        The circumference of a tire in inches.
+
+        >>> tire = Tire('P', 205, 65, 15)
+        >>> tire.circumference()
+        80.1
+        """
+        side_wall_inches = self._side_wall_inches()
+        total_diameter = side_wall_inches * 2 + self.diameter
+        return round(total_diameter * math.pi, 1)
+
+    def __repr__(self):
+        """
+        Represent the tire's information in the standard notation present
+        on the side of the tire. Example: 'P215/65R15'
+        """
+        return (f"{self.tire_type}{self.width}/{self.ratio}"
+                + f"{self.construction}{self.diameter}")
+
+    def _side_wall_inches(self):
+        return (self.width * (self.ratio / 100)) / 25.4
+
+class SnowTire(Tire):
+    def __init__(self, tire_type, width, ratio, diameter, chain_thickness, brand='', construction='R'):
+        Tire.__init__(self, tire_type, width, ratio, diameter, brand, construction)
+        self.chain_thickness = chain_thickness
+
+    def circumference(self):
+        """
+        The circumference of a tire w/ show chains in inches.
+
+        >>> tire = SnowTire('P', 205, 65, 15, 2)
+        >>> tire.circumference()
+        92.7
+        """
+        side_wall_inches = self._side_wall_inches()
+        total_diameter = (side_wall_inches + self.chain_thickness) * 2 + self.diameter
+        return round(total_diameter * math.pi, 1)
+We used another doctest here to show the usage of our SnowTire.circumference method. If we print a SnowTire instance it will automatically use the __repr__ implementation from the Tire class because we inherited all of the behavior of the Tire class. We customized both the __init__ and circumference methods to handle the changes that the chain_thickness value adds. Because the calculation of the tire sidewall thickness is a little complicated, we extracted that into a separate "private" method so that we could use it in both implementations (the method name starts with a single underscore).
+
+Using super()
+The circumference method is a situation where we needed to make a modification midway through the calculation, so it made more sense to extract a helper method and write a whole new implementation. But most of the time when we're working with inheritance it's because we do want most of the initial implementation. In these situations, we have access to the super function that allows us to utilize the method implementations from our parent class. As it stands right now, our SnowTire class will display itself in the same way as the Tire class, but we'd like to distinguish them when they're printed out. To do this, we'll override the __repr__ method, but we want to simply add a (Snow) to the end of the original information. Let's utilize super to accomplish this:
+
+~/learning_python/tire.py
+
+# Implementation of Tire omitted
+
+class SnowTire(Tire):
+    def __init__(self, tire_type, width, ratio, diameter, chain_thickness, brand='', construction='R'):
+        Tire.__init__(self, tire_type, width, ratio, diameter, brand, construction)
+        self.chain_thickness = chain_thickness
+
+    def circumference(self):
+        """
+        The circumference of a tire w/ show chains in inches.
+
+        >>> tire = SnowTire('P', 205, 65, 15, 2)
+        >>> tire.circumference()
+        92.7
+        """
+        side_wall_inches = self._side_wall_inches()
+        total_diameter = (side_wall_inches + self.chain_thickness) * 2 + self.diameter
+        return round(total_diameter * math.pi, 1)
+
+    def __repr__(self):
+        return super().__repr__() + " (Snow)"
+This implementation is clean, and allows us to avoid repeating ourselves just to add a small modification to the __repr__ output. Additionally, we can (and should) use super as part of the __init__ customizations that we made earlier. The existing implementation was how it would be done in Python 2, and you might see it from time to time. But in Python 3, we can leverage super in the exact way that we did with __repr__. Let's clean up our __init__ method:
+
+~/learning_python/tire.py
+
+# Implementation of Tire omitted
+
+class SnowTire(Tire):
+    def __init__(self, tire_type, width, ratio, diameter, chain_thickness, brand='', construction='R'):
+        super().__init__(tire_type, width, ratio, diameter, brand, construction)
+        self.chain_thickness = chain_thickness
+
+    def circumference(self):
+        """
+        The circumference of a tire w/ show chains in inches.
+
+        >>> tire = SnowTire('P', 205, 65, 15, 2)
+        >>> tire.circumference()
+        92.7
+        """
+        side_wall_inches = self._side_wall_inches()
+        total_diameter = (side_wall_inches + self.chain_thickness) * 2 + self.diameter
+        return round(total_diameter * math.pi, 1)
+
+    def __repr__(self):
+        return super().__repr__() + " (Snow)"
+The only real differences are that instead of using the Tire constant, we call super() and we also don't need to pass self into the call to __init__. Using super allows us to contain the details about our superclass to the initial declaration, and if we end up changing our superclass later on we won't need to modify other spots where we hardcoded the superclass's name.

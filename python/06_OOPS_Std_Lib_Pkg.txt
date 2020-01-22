@@ -1,0 +1,26 @@
+One of Python's great strengths is that it comes with a standard library containing many useful modules. In this lesson, we'll learn the various ways that we can use modules, and we'll also take a look at some of the commonly used modules.
+
+Documentation For This Video
+Python Modules Tutorial -- https://docs.python.org/3/tutorial/modules.html
+Python Module Index -- https://docs.python.org/3/py-modindex.html
+The math module -- https://docs.python.org/3/library/math.html#module-math
+
+Using Standard Library Modules
+We've already utilized a standard library package when we used the math module to calculate the circumference of a tire. We used one of the variables from the math module in the form of pi, but we loaded the entire module using this line:
+
+import math
+Using import we're able to access the internals of the module, by chaining off of the module's name as we did with pi using math.pi, but there are other ways we could have accessed pi. Let's take a look at some of our options:
+
+from math import pi - We can access pi by itself, and we can't reference math because we used a selective import.
+from math import pi as p - This would allow us to have access to a p variable that contains the value of pi.
+from math import pi, floor, ceil - This would selectively import the pi variable, the floor function, and the ceil function.
+from math import * - This would import EVERYTHING (except names starting with an underscore) from the math module into the current namespace. Avoid doing this if possible.
+Useful Standard Library Modules
+Here are some of the most useful standard library modules that we'll use throughout the remainder of the course.
+
+argparse - for creating CLIs
+json - for working with JSON
+math - for doing math operations
+os - for interacting with operating system resources
+pdb - the Python debugger
+sys - for interacting with system specific parameters and functions

@@ -1,0 +1,113 @@
+In addition to being an object-oriented programming language, Python lends itself to applying some ideas from functional programming, because functions are also objects. In this lesson, we're going to take a look at decorators and how they allow us to extend our functions.
+
+Documentation For This Video
+The decorator documentation - https://docs.python.org/3/glossary.html#term-decorator
+The classmethod decorator - https://docs.python.org/3/library/functions.html#classmethod
+The staticmethod  - https://docs.python.org/3/library/functions.html#staticmethod
+The property decorator - https://docs.python.org/3/library/functions.html#property
+
+
+Higher Order Functions
+
+The distinction between referencing a function and calling a function allows us to pass functions into other functions, and return functions from functions. A function that receives a function argument and/or returns a function is what's known as a "higher-order function." And in Python, there's a special syntax that allows us to apply these functions to the functions that we're defining, in order to get additional functionality.
+
+This probably sounds a little complicated, and it can be, but it can be a very powerful tool once we understand what's going on behind the scenes.
+
+Let's create a new file called decorators.py, and create our first higher-order function that receives a function as an argument:
+
+~/learning_python/decorators.py
+
+def inspect(func, *args):
+    print(f"Running {func.__name__}")
+    val = func(*args)
+    print(val)
+    return val
+
+def combine(a, b):
+    return a + b
+This shows off something that we haven't seen yet with the *args argument. This is a way to capture all remaining positional arguments into a list. It allows inspect to take 1 or more arguments. Functions that can take a variable number of arguments are known as variadic functions. In this case, if we want inspect to be general-purpose, we need it to take in arguments to pass to the func argument. To unpack the arguments and pass them into another function, we need to prefix the variable name with an asterisk *. The documentation for this can provide more information and explains how we could use **kwargs to do a similar thing for keyword arguments.
+
+Let's see how we would use this right now in the REPL:
+
+$ python3.7 -i decorators.py
+>>> inspect(combine, 1, 2)
+Running combine
+3
+3
+This is an example of a higher order function that takes a function argument and uses it, but it's not that useful. A more common way to use higher-order functions in Python is by defining decorators which take in a function as an argument and then return a modified version of the function.
+
+Decorators
+To make inspect more useful, we're going to modify it so that we can decorate combine when we're defining it. To do this, we'll stop receiving the *args argument, receiving just the function instead, and then we'll define a new function within the context of inspect before we return it. We'll use the decorator syntax to then wrap combine, with inspect above the line defining combine. Let's take a look at this in action:
+
+~/learning_python/decorators.py
+
+def inspect(func):
+    def wrapped_func(*args, **kwargs):
+        print(f"Running {func.__name__}")
+        val = func(*args, **kwargs)
+        print(f"Result: {val}")
+        return val
+
+    return wrapped_func
+
+@inspect
+def combine(a, b):
+    return a + b
+Notice that we're now using *args and **kwargs in wrapped_func and this will allow our returning function to handle any arguments before passing them to func.
+
+Now when we call combine it will have the added functionality of inspect because what we're really calling is the wrapped_func returned from inspect:
+
+$ python3.7 -i decorators.py
+>>> combine(1, b=2)
+Running combine
+Result: 3
+3
+By using a decorator, we were able to add additional functionality to combine (or any function) without needing to modify the original, pure implementation.
+
+Commonly Used Decorators
+Now that we know how decorators work, it would be handy to know when to use them. Adding additional printing to functions is something that we can do, but that doesn't mean it's something we should do.
+
+Some of the most common decorators are classmethod, staticmethod, and property. All of these allow us to modify how method inside of our classes work.
+
+Let's create a new class within decorators.py that uses these decorators to understand what they do:
+
+~/learning_python/decorators.py
+
+# inspect and combine omitted
+class User:
+    base_url = 'https://example.com/api'
+
+    def __init__(self, first_name, last_name):
+        self.first_name = first_name
+        self.last_name = last_name
+
+    @classmethod
+    def query(cls, query_string):
+        return cls.base_url + '?' + query_string
+
+    @staticmethod
+    def name():
+        return "Kevin Bacon"
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+This class does quite a lot, so let's go through it. First, we're creating a class level variable in base_url. This exists on the class itself, and each instance also has a copy of it. Next, we're defining our initializer as we've done before. The query method is a function that we'd like to exist on the User class itself, not an instance of the class. This is what's known as a "class method." To achieve this, we use the @classmethod decorator, and the User class itself is passed in as the first argument.
+
+The name static method is similar, but a @staticmethod doesn't need an implicit argument. It's really just a function that is attached to the User class, but won't use any of the class's state. Finally, we define the full_name method as a property by using the @property decorator. By doing this, when we reference user_instance.full_name it won't return the function to us, but will instead return the result of the function.
+
+Let's see our class in action:
+
+$ python3.7 -i decorators.py
+>>> User.name
+<function User.name at 0x7fcd82686f28>
+>>> User.name()
+'Kevin Bacon'
+>>> User.query('name=test')
+'https://example.com/api?name=test'
+>>> user = User('Keith', 'Thompson')
+>>> user.base_url
+'https://example.com/api'
+>>> user.full_name
+'Keith Thompson' It's worth noting that the property decorator is actually a class and not a function, and can be used 
+in more complicated ways. I encourage you to read the documentation for it.

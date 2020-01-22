@@ -1,0 +1,14 @@
+
+Xvnc TigerVNC 1.8.0 - built Aug  9 2019 03:04:19
+Copyright (C) 1999-2017 TigerVNC Team and many others (see README.txt)
+See http://www.tigervnc.org for information on TigerVNC.
+Underlying X server release 12001000, The X.Org Foundation
+
+
+Thu Oct 24 11:48:06 2019
+ vncext:      VNC extension running!
+ vncext:      Listening for VNC connections on all interface(s), port 5901
+ vncext:      created VNC server for screen 0
+No protocol specified
+
+** (process:1475): WARNING **: 11:48:22.803: Could not make bus activated clients aware of XDG_CURRENT_DESKTOP=GNOME environment variable: Could not connect: Connection refused

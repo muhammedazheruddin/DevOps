@@ -1,0 +1,176 @@
+With one custom class under our belt, we're ready to think about how we can use classes together to create full-featured domain models. In this lesson, we'll create another class and utilize it with our Car class.
+
+Python Documentation For This Video
+Classes-https://docs.python.org/3/tutorial/classes.html#classes
+Doctest-https://docs.python.org/3.7/library/doctest.html
+
+Modeling the Tire
+Currently, our Car class has tires and an engine, but they're all strings and don't really hold the information that we'd expect. For a tire, it should probably have these attributes:
+
+brand - The brand of the tire.
+tire_type - The type of the tire (valid options: None, 'P', 'LT'). We're not using type as the name because it's a name of the built-in function.
+width - The tire width in millimeters
+ratio - The ratio of the tire height to its width. A percentage represented as an integer.
+construction - How the tire is constructed. The default (and only) option is 'R'.
+diameter - The diameter of the wheel in inches.
+Let's model our tire by creating a Tire class. We'll create this class in its own file (next to creating_classes.py) called tire.py:
+
+~/learning_python/tire.py
+
+class Tire:
+    """
+    Tire represents a tire that would be used with an automobile.
+    """
+
+    def __init__(self, tire_type, width, ratio, diameter, brand='', construction='R'):
+        self.tire_type = tire_type
+        self.width = width
+        self.ratio = ratio
+        self.diameter = diameter
+        self.brand = brand
+        self.construction = construction
+Now we have a way to represent an individual tire. Let's go into the REPL and pass a list of Tire instances as tires when we create a Car:
+
+$ python3.7 -i creating_classes.py
+>>> from tire import Tire
+>>> tire = Tire('P', 205, 55, 15)
+>>> tires = [tire, tire, tire, tire]
+>>> honda = Car(tires=tires, engine='4-cylinder')
+>>> honda.description()
+A car with a 4-cylinder engine, and [<tire.Tire object at 0x7ff1b0a7fe48>, <tire.Tire object at 0x7ff1b0a7fe48>, <tire.Tire object at 0x7ff1b0a7fe48>, <tire.Tire object at 0x7ff1b0a7fe48>] tires
+A few things to note here:
+
+To load an additional file into the REPL, we were able to reference it by name using from [FILE_NAME_MINUS_EXTENSION] import [CLASS/FUNCTION/VARIABLE]. We'll learn more about loading code from other modules and packages when we look into the standard library, but this is handy for now.
+We created a list of tires by using the same tire variable 4 times.
+The printing of each tire isn't very readable, and we can see that each item points to the same tire in memory (based on the at 0x7ff1b0a7fe48).
+Before we discuss composition, let's improve this print out by adding a new double underscore method to the Tire class: the __repr__ method. The __repr__ method specifies what should be returned when an instance of the class is passed to the repr function, but also when it printed as part of another object being printed.
+
+~/learning_python/tire.py
+
+class Tire:
+    """
+    Tire represents a tire that would be used with an automobile.
+    """
+
+    def __init__(self, tire_type, width, ratio, diameter,
+                 brand='', construction='R'):
+        self.tire_type = tire_type
+        self.width = width
+        self.ratio = ratio
+        self.diameter = diameter
+        self.brand = brand
+        self.construction = construction
+
+    def __repr__(self):
+        """
+        Represent the tire's information in the standard notation present
+        on the side of the tire. Example: 'P215/65R15'
+        """
+        return (f"{self.tire_type}{self.width}/{self.ratio}"
+                + f"{self.construction}{self.diameter}")
+Now if we repeat the process of creating a car with some tires:
+
+$ python3.7 -i creating_classes.py
+>>> from tire import Tire
+>>> tire = Tire('P', 205, 55, 15)
+>>> tires = [tire, tire, tire, tire]
+>>> honda = Car(tires=tires, engine='4-cylinder')
+>>> honda.description()
+A car with a 4-cylinder engine, and [P205/55R15, P205/55R15, P205/55R15, P205/55R15] tires
+Note: If we were just printing the tire by itself then it would use the __str__ method, and since we didn't implement that, it internally uses the __repr__ method.
+
+What is Composition?
+What we just did is use "composition" to build up our Car class by passing in Tire objects. One of the big ideas behind composition is that we can keep our classes focused on the behaviors and state that pertain to itself, and if it needs functionality from a different object we can inject those. The beautiful thing about composition is that it allows us to have a clean separation of concerns between our objects, and lets us reuse them. To show the power of composition, let's add a circumference method to our Tire class:
+
+~/learning_python/tire.py
+
+import math
+
+class Tire:
+    """
+    Tire represents a tire that would be used with an automobile.
+    """
+
+    def __init__(self, tire_type, width, ratio, diameter, brand='', construction='R'):
+        self.tire_type = tire_type
+        self.width = width
+        self.ratio = ratio
+        self.diameter = diameter
+        self.brand = brand
+        self.construction = construction
+
+    def circumference(self):
+        """
+        The circumference of the tire in inches.
+
+        >>> tire = Tire('P', 205, 65, 15)
+        >>> tire.circumference()
+        80.1
+        """
+        side_wall_inches = (self.width * (self.ratio / 100)) / 25.4
+        total_diameter = side_wall_inches * 2 + self.diameter
+        return round(total_diameter * math.pi, 1)
+
+    def __repr__(self):
+        """
+        Represent the tire's information in the standard notation present
+        on the side of the tire. Example: 'P215/65R15'
+        """
+        return (f"{self.tire_type}{self.width}/{self.ratio}"
+                + f"{self.construction}{self.diameter}")
+Now we can use this method within our Car class by adding a wheel_circumference method:
+
+~/learning_python/creating_classes.py
+
+class Car:
+    """
+    Car models a car w/ tires and an engine
+    """
+
+    def __init__(self, engine, tires):
+        self.engine = engine
+        self.tires = tires
+
+    def description(self):
+        print(f"A car with a {self.engine} engine, and {self.tires} tires")
+
+    def wheel_circumference(self):
+        if len(self.tires) > 0:
+            return self.tires[0].circumference()
+        else:
+            return 0
+This is the power of composition. Our Car class doesn't need to know how to calculate the circumference of its wheels (which makes sense, since you can swap out wheels on a car).
+
+$ python3.7 -i creating_classes.py
+>>> from tire import Tire
+>>> tire = Tire('P', 205, 65, 15)
+>>> tires = [tire, tire, tire, tire]
+>>> honda = Car(tires=tires, engine='4-cylinder')
+>>> honda.wheel_circumference()
+80.1
+>>> honda.tires = []
+>>> honda.wheel_circumference()
+0
+A Quick Look at Doctests
+You may have noticed the extra content that was added to the docstring of our circumference method. This is actually so that we can ensure our implementation works. We've simulated how we would use this code in the REPL, and we can use the doctest module to evaluate this, ensuring that the output would match the 80.1 we're expecting. Here's how we would run this:
+
+$ python3.7 -m doctest -v tire.py
+Trying:
+    tire = Tire('P', 205, 65, 15)
+Expecting nothing
+ok
+Trying:
+    tire.circumference()
+Expecting:
+    80.1
+ok
+4 items had no tests:
+    tire
+    tire.Tire
+    tire.Tire.__init__
+    tire.Tire.__repr__
+1 items passed all tests:
+   2 tests in tire.Tire.circumference
+2 tests in 5 items.
+2 passed and 0 failed.
+Test passed.

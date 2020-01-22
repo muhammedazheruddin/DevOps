@@ -1,0 +1,92 @@
+#Updating_Containers_with Watchtower
+ssh <cloud_user>@<serverIP>
+password:
+
+docker ps
+
+sudo su
+
+vim Dockerfile
+
+FROM node
+
+RUN mkdir -p /var/node
+ADD content-express-demo-app/ /var/node/
+WORKDIR /var/node
+RUN npm install
+CMD ./bin/www
+
+:wq
+
+clear
+
+docker login
+<create an account with Docker>
+
+docker build -t <username>/express -f Dockerfile .
+
+docker push <username>/express
+
+docker run -d --name demo-app -p 80:3000 --restart always <username>/express
+
+docker run -d --name watchtower-app --restart always -v /var/run/docker.sock:/var/run/docker.sock v2tec/watchtower -i 30
+
+vim Dockerfile
+
+
+
+FROM node
+
+RUN mkdir -p /var/node
+RUN mkdir -p /var/test
+ADD content-express-demo-app/ /var/node/
+WORKDIR /var/node
+RUN npm install
+CMD ./bin/www
+
+:wq
+
+docker build -t <username>/express -f Dockerfile .
+
+docker ps
+
+
+
+
+
+======================================================================
+
+sudo yum -y install git
+clear
+git clone https://github.com/linuxacademy/content-dockerquest-spacebones
+cd content-dockerquest-spacebones/nodejs-app/
+clear
+ls
+
+vim Dockerfile
+
+
+MAINTAINER spacebones<trilliams@gmail.com>
+FROM node: 7
+WORKDIR /app
+COPY package.json /app
+RUN npm install
+COPY . /app
+CMD node index.js
+EXPOSE 8081
+
+
+:wq!
+
+Save
+
+clear
+docker build -t baconator:dev .
+
+clear
+docker images
+docker run -d -p 80:8081 baconator:dev
+clear
+
+curl http://localhost
+

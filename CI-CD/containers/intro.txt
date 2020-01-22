@@ -1,0 +1,29 @@
+An important step in the journey toward a full CI/CD Pipeline is containerization. Containers make it easier to implement some of the automation features involved in orchestration. In this lesson, we will discuss what containers are and why we want to use them in the context of a CI/CD Pipeline. We will also introduce Docker, the container tool of choice for this course.
+
+
+Feel free to check out Docker's own overview of the Docker technology: https://www.docker.com/what-docker
+
+Intalling DOCker
+
+In order to begin using Docker, you need to know how to install it. This lesson will guide you through the process of installing Docker within a CentOS 7 environment. After completing this lesson, you should have an understanding of how to install Docker.
+
+
+If you want more information, or you want to know how to install Docker in a non-CentOS 7 environment, be sure to check out the official Docker install documentation: https://docs.docker.com/install/
+
+
+
+Docker Basics:
+===============
+
+
+In order to utilize Docker within the context of a CI/CD Pipeline, you need some basic knowledge of its concepts and how it is used. In this lesson, we will cover some of the essential concepts of Docker, such as images, containers, and registries. We will also demonstrate a few of the common commands that you will use to interact with Docker.
+After completing this lesson, you will know how to build a Docker image and publish it to Docker Hub. You will also know how to run a container using a Docker image.
+
+
+For more information, check out Docker's official getting started guide: https://docs.docker.com/get-started/
+
+
+Here are the contents of the Dockerfile that was used for this lesson's demo:
+
+FROM ubuntu
+CMD ["/bin/bash", "-c", "while true; do echo Hello; sleep 1; done"]

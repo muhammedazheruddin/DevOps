@@ -1,0 +1,16 @@
+
+Xvnc TigerVNC 1.8.0 - built Aug  9 2019 03:04:19
+Copyright (C) 1999-2017 TigerVNC Team and many others (see README.txt)
+See http://www.tigervnc.org for information on TigerVNC.
+Underlying X server release 12001000, The X.Org Foundation
+
+
+Mon Nov 11 09:18:35 2019
+ vncext:      VNC extension running!
+ vncext:      Listening for VNC connections on all interface(s), port 5902
+ vncext:      created VNC server for screen 0
+
+Mon Nov 11 09:18:39 2019
+ ComparingUpdateTracker: 0 pixels in / 0 pixels out
+ ComparingUpdateTracker: (1:-nan ratio)
+Warning: VNC extension does not support -reset, terminating instead. Use -noreset to prevent termination.

@@ -1,0 +1,155 @@
+Scenario
+To be effective with Python, one needs to be comfortable using the control flow structures it provides, either to take actions or to perform the same action multiple times. In this hands-on lab, we'll be utilizing control flow structures, like `if` statements and loops, to fix some failing automated tests, and ensure that the application works correctly. By the time we're finished with this hands-on lab, we should be more comfortable using `if` statements and `for` loops to write more robust functions.
+
+
+
+Utilizing Control Flow Structures in Python
+Introduction
+To be effective with Python, one needs to be comfortable using the control flow structures it provides, either to take actions or to perform the same action multiple times. In this hands-on lab, we'll be utilizing control flow structures, like if statements and loops, to fix some failing automated tests, and ensure that the application works correctly.
+
+By the time we're finished with this hands-on lab, we should be more comfortable using if statements and for loops to write more robust functions.
+
+The Scenario
+We've been tasked with building a terminal-based todo list application, and it's in its earliest stages. A co-worker has written and documented a few functions that interact with "todo" dictionaries, but there are some edge cases that aren't handled. By the time we've finished with our implementation, we should have modified the implementation for the take_first function to handle an empty list of todos, and modified sum_points to handle any number of todos.
+
+Thankfully, our co-worker has already adjusted the doctests for these functions, to demonstrate how they should work. We have some automated tests that we can run, to ensure that our implementation meets the requirements. To run the tests, we'll use the following command from within the ~/tasker directory:
+
+[cloud_user@host]$ python3.7 -m doctest tasker.py
+...
+2 items had failures:
+   1 of   2 in tasker.sum_points
+   1 of   6 in tasker.take_first
+***Test Failed*** 2 failures.
+[cloud_user@host]$
+By the time we've implemented these functions, we'll have proven our knowledge of some of Python's built-in control flow structures.
+
+Get Logged In
+Use the credentials and server IP in the hands-on lab overview page to log into the server with SSH. Once we're in, we can run cd tasker so that we're in the right directory when we get to work.
+
+Correct the take_first Function
+If we run cat tasker.py, we'll see our script, and that it has a lot of doctests in it. If we want to see which ones are broken, we can run this:
+
+python3.7 -m doctest tasker.py
+This will show two failures. Let's fix the take_first function to begin with. It raises an error if it receives an empty list of todos. Let's fix that with an if statement. Edit the file:
+
+vim tasker.py
+Down at line 29, we'll insert the if. Currently the file looks like this (line numbers included):
+
+27     (None, [])
+28     """
+29     todo = todos.pop(0)
+30     return (todo, todos)
+31
+We're going to wrap our if around the todo and return, so it looks like this:
+
+    (None, [])
+    """
+    if todos:
+        todo = todos.pop(0)
+        return (todo, todos)
+    else:
+        return (None, [])
+If we run the script again (with python3.7 -m doctest tasker.py) then that error should not appear. We've still got one though, and it's being thrown by the sum_points function.
+
+Correct the sum_points Function
+Based on what we see in the error message, the sum_points function requires two positional arguments and it only received one. We have to change the number of arguments that it expects. Edit tasker.py again:
+
+vim tasker.py
+We're going to change this line:
+
+def sum_points(todo1, todo2):
+Make it read like this instead:
+
+def sum_points(todos):
+Farther down is where we can create an incrementer, using a for loop. Take a look at this section (line numbers included):
+
+42     >>> sum_points(todos)
+43     10
+44     """
+45     return int(todo1['points']) + int(todo2['points'])
+We'll add our loop so that the section now looks like this:
+
+    10
+    """
+    total = 0
+    for todo in todos:
+        total += int(todo['points'])
+    return total
+    return int(todo1['points']) + int(todo2['points'])
+Now we can run it again with python3.7 -m doctest tasker.py, we should get no output. That means the script is working. If we want to see output and know what's going on, we can run it again with the -v flag:
+
+python3.7 -m doctest -v tasker.py
+Conclusion
+After two simple fixes, we were able to get tasker.py performing as it should, or at least as far as it's been developed to do so far. Congratulations!
+
+
+
+Additional Information and Resources
+We've been tasked with building a terminal-based todo list application, and it's in its earliest stages. A co-worker has written and documented a few functions that interact with "todo" dictionaries, but there are some edge cases that aren't handled. By the time we've finished with our implementation, we should have modified the implementation for the take_first function to handle an empty list of todos, and modified sum_points to handle any number of todos.
+
+Thankfully, our co-worker has already adjusted the doctests for these functions, to demonstrate how they should work. We have some automated tests that we can run, to ensure that our implementation meets the requirements. To run the tests, we'll use the following command from within the ~/tasker directory:
+
+[cloud_user@host]$ python3.7 -m doctest -v tasker.py
+...
+3 items had failures:
+   1 of   2 in tasker.print_todo
+   2 of   2 in tasker.sum_points
+   3 of   4 in tasker.take_first
+8 tests in 4 items.
+2 passed and 6 failed.
+***Test Failed*** 6 failures.
+[cloud_user@host]$
+By the time we've implemented these functions, we'll have proven our knowledge of some of Python's built-in control flow structures.
+
+
+Learning Objectives
+check_circle
+Correct the `take_first` Function
+keyboard_arrow_up
+Currently, the take_first function will raise an error if it receives an empty list of todos, but we'd like to handle that differently. Our doctests show that we should instead be returning (None, todos) if todos is empty. There is more than one way that we could go about doing this:
+
+Use a conditional statement to see if todos is empty right away. If it is, then return (None, todos).
+Use a try statement, and if an error is raised return (None, todos).
+For simplicity's sake let's use a conditional, instead of error handling, as control flow:
+
+def take_first(todos):
+    """
+    take_first receives a list of todos and removes the first todo
+    and returns that todo and the remaining todos in a tuple
+
+    >>> todos = [{'name': 'Example 1', 'body': 'This is a test task', 'points': '3'},
+    ... {'name': 'Task 2', 'body': 'Yet another example task', 'points': '2'}]
+    >>> todo, todos = take_first(todos)
+    >>> todo
+    {'name': 'Example 1', 'body': 'This is a test task', 'points': '3'}
+    >>> todos
+    [{'name': 'Task 2', 'body': 'Yet another example task', 'points': '2'}]
+    >>> todos = []
+    >>> take_first(todos)
+    (None, [])
+    """
+    if todos:
+        todo = todos.pop(0)
+        return (todo, todos)
+    else:
+        return (None, todos)
+check_circle
+Correct the `sum_points` Function
+keyboard_arrow_up
+The original version of sum_points takes two todo dictionaries and returns the sum of their point values. But that's not very useful. For us to make this work for us, we're going to modify the function so that it will take a list of todo dictionaries and sum all of the point values. We can do this easily, using a for loop and an accumulator:
+
+def sum_points(todos):
+    """
+    sum_points receives two todo dictionaries and returns the sum of their `point` values.
+
+    >>> todos = [{'name': 'Example 1', 'body': 'This is a test task', 'points': '3'},
+    ... {'name': 'Task 2', 'body': 'Yet another example task', 'points': '2'},
+    ... {'name': 'Task 3', 'body': 'Third task', 'points': '5'}]
+    >>> sum_points(todos)
+    10
+    """
+    total = 0
+    for todo in todos:
+        total += int(todo['points'])
+    return total
+

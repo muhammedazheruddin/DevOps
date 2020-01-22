@@ -1,0 +1,33 @@
+#Persistent_Data_Volumes
+ssh <cloud_user>@<serverIP>
+password:
+
+docker ps
+
+ls
+
+docker volume create missionstatus
+
+docker volume ls
+
+docker volume inspect missionstatus
+
+sudo -i
+
+clear
+
+cp -r /home/cloud_user/content-dockerquest-spacebones/volumes/* /var/lib/docker/volumes/missionstatus/_data/
+
+ls /var/lib/docker/volumes/missionstatus/_data/
+logout #from root
+
+clear
+
+docker run -d -p 80:80 --name fishin-mission \
+> --mount source=missionstatus,target=/usr/local/apache2/htdocs httpd
+
+docker ps
+
+
+ 
+

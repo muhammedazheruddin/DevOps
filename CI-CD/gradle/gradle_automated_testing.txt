@@ -1,0 +1,5 @@
+Automated testing is a very important component of a CI/CD Pipeline, and it is often performed using build automation. This lesson introduces the concept of automated testing and covers a few different types of automated tests. It also discusses the basics of executing automated tests in Gradle and demonstrates what that can look like.
+After completing this lesson, you will have a foundational understanding of automated tests that will allow you to incorporate them into the CI/CD Pipeline.
+
+
+The sample project used in the demo for the lesson can be found on the example-solution branch of this GitHub repo: https://github.com/linuxacademy/cicd-pipeline-train-schedule-gradle

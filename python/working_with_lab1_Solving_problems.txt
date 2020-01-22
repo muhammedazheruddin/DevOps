@@ -1,0 +1,102 @@
+Solving Problems with Built-in Python Types
+Scenario
+We've been tasked with building a terminal based todo list application, and it's in its earliest stages. A co-worker has written and documented a few functions that we'll need to implement. By the time we've finished, we should have written implementations for the print_todo, take_first, and sum_points functions within ~/tasker/tasker.py.
+
+Thankfully, our co-worker documented the code using doctests, so we have some automated tests that we can run to ensure that our implementation meets the requirements.
+
+By the time we've implemented these functions, we'll have proven our knowledge of some of Python's built-in types such as strings, integers, dictionaries, lists, and tuples.
+
+Get logged in
+Use the credentials and server IP in the hands-on lab overview page to log into the server with SSH.
+
+The tasker.py file
+This is the file we're working with, and it's sitting in the ~/tasker directory, so let's get into the directory and run the file, to see what we're up against:
+
+[user@host]$ cd tasker
+[user@host]$ python3.7 -m doctest tasker.py
+This spits out a bunch of errors. The one we're concerned with is up near the beginning of the ouput. The print_todo function exists, but doesn't do anything.
+
+Implement print_todo function
+The last line of the print_todo function currently says pass. We need to manually print out a format string (name and body) so let's change that line (in whatever text editor suits our fancy) to read:
+
+print(f"{todo['name']}: {todo['body']}")
+The whole section would look like this when we're done:
+
+def print_todo(todo):
+    """
+        print_todo takes in a todo dictionary and prints it out
+            with by separating the `name` from the `body` using a colon (:).
+
+                >>> todo = {'name': 'Example 1', 'body': 'This is a test task', 'points': '3'}
+                    >>> print_todo(todo)
+                        Example 1: This is a test task
+                            >>>
+                                """
+                                    print(f"{todo['name']}: {todo['body']}")
+                                    If we run the script again, we should see that there are now no failures related to print_todo. We're making progress.
+
+                                    Implement take_first function
+                                    The take_first function needs to return 2 objects to us, in the form of the first todo and the remaining todos. We can achieve this by returning a tuple of values, and the pop function on a list should allow us to get the first item. Here's one way that we might implement this function to get the tests passing (changing a simple return line to something that's returning our todo):
+
+                                    def take_first(todos):
+                                        """
+                                            take_first receives a list of todos and removes the first todo
+                                                and returns that todo and the remaining todos in a tuple
+
+                                                    >>> todos = [{'name': 'Example 1', 'body': 'This is a test task', 'points': '3'},
+                                                        ... {'name': 'Task 2', 'body': 'Yet another example task', 'points': '2'}]
+                                                            >>> todo, todos = take_first(todos)
+                                                                >>> todo
+                                                                    {'name': 'Example 1', 'body': 'This is a test task', 'points': '3'}
+                                                                        >>> todos
+                                                                            [{'name': 'Task 2', 'body': 'Yet another example task', 'points': '2'}]
+                                                                                """
+                                                                                    todo = todos.pop(0)
+                                                                                        return (todo, todos)
+                                                                                        Implement sum_points function
+                                                                                        The sum_points function needs to receive two todo dictionaries and return the sum of the point values. The doctest shows that the point values will be strings, so we'll need to convert them to be integers before we perform our addition. Here's one way that we could get these tests passing:
+
+                                                                                        def sum_points(todo1, todo2):
+                                                                                            """
+                                                                                                sum_points receives two todo dictionaries and returns the sum of their `point` values.
+
+                                                                                                    >>> todos = [{'name': 'Example 1', 'body': 'This is a test task', 'points': '3'},
+                                                                                                        ... {'name': 'Task 2', 'body': 'Yet another example task', 'points': '2'}]
+                                                                                                            >>> sum_points(todos[0], todos[1])
+                                                                                                                5
+                                                                                                                    """
+                                                                                                                        return int(todo1['points']) + int(todo2['points'])
+                                                                                                                        Conclusion
+                                                                                                                        Running python3.7 -m doctest tasker.py again will return nothing. That's fine. No news is good news. If we wanted verbose output, we could have run python3.7 -m doctest -v tasker.py and gotten some, but we're good to go either way. We've finished our task. Congratulations
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                        Additional Information and Resources
+                                                                                                                        We've been tasked with building a terminal based todo list application, and it's in its earliest stages. A co-worker has written and documented a few functions that we'll need to implement. By the time we've finished, we should have written implementations for the print_todo, take_first, and sum_points functions within ~/tasker/tasker.py.
+
+                                                                                                                        Thankfully, our co-worker documented the code using doctest, so we have some automated tests that we can run to ensure that our implementation meets the requirements. To run the tests, we'll use the following command from within the ~/tasker directory:
+
+                                                                                                                        $ python3.7 -m doctest -v tasker.py
+                                                                                                                        ...
+                                                                                                                        3 items had failures:
+                                                                                                                           1 of   2 in tasker.print_todo
+                                                                                                                              2 of   2 in tasker.sum_points
+                                                                                                                                 3 of   4 in tasker.take_first
+                                                                                                                                 8 tests in 4 items.
+                                                                                                                                 2 passed and 6 failed.
+                                                                                                                                 ***Test Failed*** 6 failures.
+                                                                                                                                 $
+                                                                                                                                 By the time we've implemented these functions, we'll have proven our knowledge of some of Python's built-in types such as strings, integers, dictionaries, lists, and tuples.
+
+                                                                                                                                 More information about formatted string literals, or "f-strings", can be found here.!

@@ -1,0 +1,4 @@
+Continuous Integration is an essential component of a full CI/CD Pipeline. This lesson will briefly discuss what CI is, and it will introduce the CI tools that will be used in this course: Jenkins. After completing this lesson, you will be ready to begin learning how to implement CI using Jenkins.
+
+
+For more information on Jenkins, check out the official Jenkins site: https://jenkins.io/

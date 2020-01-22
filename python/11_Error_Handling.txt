@@ -1,0 +1,99 @@
+Not everything can go according to plan in our programs, but we should know when these scenarios arise and handle them appropriately. In this lesson, we'll take a look at how to deal with error handling in Python.
+
+Documentation For This Videw - https://docs.python.org/3/reference/compound_stmts.html#the-try-statemento
+The try statement & workflow
+Handling Errors with try/except/else/finally
+When we know that there is a possibility that some our code might raise an error, we don't need to just accept it and let our program crash. We can actually handle these errors using the try statement. This is a compound statement kind of like the if statement where we will also need to use except, and have access to else and finally. Let's break down what these do by writing a small program that will potentially raise an error. We'll call this program handle_errors.py:
+
+~/learning_python/handle_errors.py
+
+my_file = open('recipes.txt', 'x')
+my_file.write('Meatballs\n')
+my_file.close()
+If we run this script once, then it will run successfully, but if we run it twice we'll see the following error:
+
+$ python3.7 handle_errors.py
+$ python3.7 handle_errors.py
+Traceback (most recent call last):
+  File "handle_errors.py", line 1, in <module>
+    my_file = open('recipes.txt', 'x+')
+FileExistsError: [Errno 17] File exists: 'recipes.txt'
+The error is a FileExistsError and it's being raised because we're opening the file for creation (using the x mode), but it already exists.
+
+To handle this, we need to place our code that could raise an error within a try statement and then except an error if it happens and do something else.
+
+~/learning_python/handle_errors.py
+
+import sys
+
+file_name = 'recipes.txt'
+
+try:
+    my_file = open(file_name, 'x+')
+    my_file.write('Meatballs\n')
+    my_file.close()
+except:
+    print(f"The {file_name} file already exists")
+    sys.exit(1)
+This is the simplest kind of try/except and this will catch any error that might be raised by open(file_name, 'x+'). If we run this file again, we should see our print out.
+
+$ python3.7 handle_errors.py
+The recipes.txt file already exists
+We could make this more specific and only except a very specific error, and even have multiple separate except blocks catching different kinds of errors. Let's introduce another potential error by passing in a bytes object to a file open in text mode and catch the errors separately:
+
+~/learning_python/handle_errors.py
+
+import sys
+
+file_name = 'recipes.txt'
+
+try:
+    my_file = open(file_name, 'x+')
+    my_file.write(b'Meatballs\n')
+    my_file.close()
+except FileExistsError as err:
+    print(f"The {file_name} file already exists")
+    sys.exit(1)
+except:
+    print(f"Unable to write to the file")
+    sys.exit(1)
+Let's run this with an existing file and without:
+
+$ python3.7 handle_errors.py
+The recipes.txt file already exists
+$ rm recipes.txt
+$ python3.7 handle_errors.py
+Unable to write to the file
+$
+The else and finally Statements
+Now we're able to handle errors, but the error handling workflow also facilitates a way for us to run code if there is no error that gets caught using else, and there's also a way to run some code after any error handling, or the else block, by using finally. Since we're using sys.exit we wouldn't be able to use finally as is, but let's make some modifications to see how both of these work.
+
+~/learning_python/handle_errors.py
+
+import sys
+
+file_name = 'recipes.txt'
+
+try:
+    my_file = open(file_name, 'x+')
+    my_file.write('Meatballs\n')
+    my_file.close()
+except FileExistsError as err:
+    print(f"The {file_name} file already exists")
+except:
+    print(f"Unable to write to the {file_name} file")
+else:
+    print(f"Wrote to {file_name}")
+finally:
+    print("Execution complete")
+Lastly, let's give this a run to see how it goes:
+
+$ python3.7 handle_errors.py
+The recipes.txt file already exists
+Execution complete
+$ rm recipes.txt
+$ python3.7 handle_errors.py
+Wrote to recipes.txt
+Execution complete
+
+

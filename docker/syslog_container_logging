@@ -1,0 +1,54 @@
+#syslog_container_logging
+ssh <cloud_user>@<serverIP>
+password:
+
+docker ps
+
+sudo su
+
+
+vim /etc/rsyslog.conf
+#uncommentthe UDP Syslog reception
+$ModLoad imudp
+$UDPServerRun 514
+
+
+:Wq
+
+systemctl start rsyslog #start syslog
+
+
+vim /etc/docker/daemon.json
+
+{
+ "log-driver":"syslog",
+ "log-opts":{
+   #"syslog-address":"udp://<privateIP address>:<portnumber(514)>"
+   "syslog-address":"udp://10.0.1.99:514" 
+ }
+}
+
+:wq
+
+systemctl start docker
+tail /var/log/messages
+
+clear
+
+docker container run -d --name syslog-logging httpd
+
+docker ps
+docker logs syslog-logging
+tail /var/log/messages
+
+docker container run -d --name json-logging --log-driver json-file httpd
+docker ps
+
+docker logs json-logging
+
+tail /var/log/messages
+
+
+
+
+

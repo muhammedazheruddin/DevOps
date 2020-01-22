@@ -1,0 +1,160 @@
+Deploy a Web Server on RedHat/CentOS
+In this lab, we will install Apache and start the service to verify its functionality. We will also work with VHosts and SSL certificates.
+
+Before we begin, become the root user:
+
+sudo su -
+Use the provided password when prompted.
+
+Set Up httpd
+Install httpd and enter y when prompted:
+
+yum install httpd
+Make sure that the service starts at boot:
+
+systemctl enable httpd
+Start the service:
+
+systemctl start httpd
+Check the service status and make sure it is running:
+
+systemctl status httpd
+Install lynx and enter y when prompted:
+
+yum install lynx
+Use lynx to test that Apache is up and running by displaying the default web page ("Access forbidden" is ok, it will expire after a moment):
+
+lynx http://localhost
+Leave the document.
+
+Change to the configuration directory:
+
+cd /etc/httpd/conf
+Edit the main configuration file:
+
+vim httpd.conf
+At the bottom of this file, add the following:
+
+IncludeOptional vhost.d/*.conf
+Save and exit the file using the :wq command.
+
+Create the vhost.d directory:
+
+cd ..
+mkdir vhost.d
+Restart Apache and ensure the service started successfully:
+
+systemctl stop httpd
+systemctl start httpd
+systemctl status httpd
+Set Up Virtual Hosts
+Edit /etc/hosts:
+
+vim /etc/hosts
+Add our domain name and private IP address:
+
+<PRIVATE IP ADDRESS> www www.transapi.com
+Save and leave the document.
+
+Create a directory for our web documents:
+
+mkdir -p /var/www/html/transapi
+Copy index.html to our web document directory:
+
+cp /home/cloud_user/index.html /var/www/html/transapi/
+Change our current host directory:
+
+cd vhost.d/
+Create a virtual host configuration file for our new domain:
+
+vim www.transapi.com_http.conf
+Add the following:
+
+<VirtualHost *:80>
+    ServerName www.transapi.com
+    ServerAlias www
+    DocumentRoot /var/www/html/transapi
+</VirtualHost>
+Save the file.
+
+Stop and then start httpd and verify that the service is running:
+
+systemctl stop httpd
+systemctl start httpd
+ps aux | grep httpd
+Use lynx to test our default web page:
+
+lynx http://www.transapi.com
+Our test page opens. Close the document.
+
+Set Up SSL for Name-Based Virtual Hosts
+We need to change to the ssl directory to continue:
+
+cd /etc/ssl
+Install mod_ssl and select y when prompted:
+
+yum install mod_ssl
+Generate a new SSL certificate:
+
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/certs/transapi.key -out /etc/ssl/certs/transapi.crt
+Use the following information for your certificate:
+
+Country Name: US
+State: NY
+Locality Name: New York City
+Organization Name: TransApi
+Organizational Unit Name: Information Technology
+Common name: <PRIVATE IP ADDRESS>
+Email Address: webadmin@transapi.com
+Change our directory to the vhost.d directory:
+
+cd /etc/httpd/vhost.d
+Copy the www.transapi.com_http.conf file to make an HTTPS version:
+
+cp www.transapi.com_http.conf www.transapi.com_https.conf
+Edit the new file:
+
+vim www.transapi.com_https.conf
+Edit the file to reflect these updates:
+
+<VirtualHost *:443>
+    ServerName www.transapi.com
+    ServerAlias www
+    DocumentRoot /var/www/html/transapi
+    SSLEngine On
+    SSLCertificateFile /etc/ssl/certs/transapi.crt
+    SSLCertificateKeyFile /etc/ssl/certs/transapi.key
+</VirtualHost>
+Save and exit the file with :wq.
+
+Restart httpd and verify it restarts successfully:
+
+systemctl stop httpd
+systemctl start httpd
+systemctl status httpd
+Verify both HTTP and HTTPS versions of our web page are working:
+
+lynx http://www.transapi.com
+lynx https://www.transapi.com
+Conclusion
+In this lab, we installed Apache and verified its functionality. We also worked with VHosts and SSL certificates to deploy the server correctly. Congratulations on finishing the lab!
+
+
+Additional Information and Resources
+During their work on creating a new Web-based API for your organization, the development team has asked for a web server that they can use to test some of their transactions, particularly over HTTPS.
+
+You have been provided credentials to a CentOS 7 system that they would like you to install Apache on (the latest version in the default repositories is acceptable). You will need to install the Apache server, make sure it is enabled on startup and then to start it for this session. Using whatever method you choose, validate the web service is started and responding to web requests.
+
+===================================
+
+OPTIONAL STEPS (See Solution Video)
+The new API will be using a site that will be called 'www.transapi.com' which will be protected by an SSL Certificate.
+
+For this development web server, a 'self-signed' certificate will be an acceptable substitute. You will want to note the private IP of the system and add an appropriate local host entry to point 'www.transapi.com' to the local private IP until the production domain is ready at a future date.
+
+You will then generate a self-signed certificate key and certificate and place them in the default /etc/ssl/certs directory (please note that the filenames for the key should end with .key and the certificate .crt).
+
+Finally, you will add a new VHost configuration for the 'www.transapi.com' domain and allow SSL over port 443 to answer, using the previously created self-signed certificate and serving content from the /var/www/html/transapi directory (you will find a file called 'index.html' in the /home/cloud_user directory that you should move to this new site directory).
+
+Once you have made the configuration changes, started the web service and verified it is responding over ports 80 and 443, you may turn the system over to the development team.
+
