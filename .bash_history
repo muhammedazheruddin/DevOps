@@ -512,3 +512,11 @@ cd python/CLI_SETUP/
 nano Utilizing_Pg_dump.txt
 git add --all
 cd ~/
+git add --all
+git status
+git commit -m "LinuxAcademy PythonCLI"
+git remote add origin https://github.com/muhammedazheruddin/DevOps.git
+git push -u origin master
+git status
+git checkout
+exit
