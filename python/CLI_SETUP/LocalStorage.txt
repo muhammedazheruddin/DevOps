@@ -1,0 +1,70 @@
+Now that we're able to get the database information from our remote server, we're ready to implement the two backup methods that we need. To start, we'll add the local storage functionality.
+
+Documentation for This Video
+BufferedWriter.read method - https://docs.python.org/3/library/io.html#io.BufferedWriter.read
+BufferedWriter.write method - https://docs.python.org/3/library/io.html#io.BufferedWriter.write
+IOBase.close method - https://docs.python.org/3/library/io.html#io.IOBase.close
+
+Implement Local Storage
+Our pgbackup.dump method is returning subprocess.Popen and that object has a stdout attribute that acts like a file. We also want to write the contents of the backup to a file, so we can write a function that assumes it will receive two open files and transfers the contents from one file to another. Let's add all of the code related to storing the backup into a new file called storage.py.
+
+By limiting our scope in that way, we can write a fairly simple function that creates the local backup. Here's what we plan to do:
+
+Receive 2 open files: an infile and outfile.
+Read the contents from the infile and write them to the outfile.
+Close both of the files.
+We want to call close on the "writeable" file to ensure that all of the content gets written (the database backup could be quite large).
+
+src/pgbackup/storage.py
+
+def local(infile, outfile):
+    outfile.write(infile.read())
+    outfile.close()
+    infile.close()
+	
+	
+	
+	
+Lecture: Interacting with AWS S3
+
+	
+The last individual unit of functionality that we need to implement is storing data in AWS S3. In this lesson, we'll expand our storage module by adding a way to write a file to S3.
+
+Documentation for This Video
+The boto3 package - https://boto3.readthedocs.io/en/latest/reference/services/s3.html#S3.Client.upload_fileobj
+
+Installing boto3
+To interface with AWS (S3 specifically), we're going to use the wonderful boto3 package. We can install this to our virtualenv using pipenv now:
+
+(pgbackup) $ pipenv install boto3
+With boto3 installed, we'll be able to connect to S3 since it will read the same configuration files that we created in an earlier lesson using the AWS CLI.
+
+Implementing S3 Storage
+The storage module that we've already created is the perfect place to put our code that interacts with S3 since it's just another form of storage. We'll create another function for s3 that will take a few things:
+
+client: An AWS client object that has an upload_fileobj method.
+infile: A file object with the data from our PostgreSQL backup.
+bucket: The name of the bucket that we'll be storing the backup in.
+name: The name of the file we'd like to create in our S3 bucket.
+The reason that we are injecting the client object is that we don't want our storage module to be in charge of configuring the client, we'll do that when we tie all of the pieces together.
+
+The upload_fileobj method works in the exact way that we need it to, so our implementation should be pretty simple:
+
+src/pbgackup/storage.py
+
+# ... previous function ommited
+def s3(client, infile, bucket, name):
+    client.upload_fileobj(infile, bucket, name)
+Manually Testing S3 Integration
+Like we did with our PostgreSQL interaction, let's manually test uploading a file to S3 using our storage.s3 function. First, we'll create an example.txt file, and then we'll load into a Python REPL with our code loaded:
+
+(pgbackup) $ echo "UPLOADED" > example.txt
+(pgbackup) $ PYTHONPATH=./src python
+>>> import boto3
+>>> from pgbackup import storage
+>>> client = boto3.client('s3')
+>>> infile = open('example.txt', 'rb')
+>>> storage.s3(client, infile, 'python-backups', infile.name)
+When we check our S3 console, we should see the file there. Lastly, remove the example.txt file and then commit these changes:
+
+(pgbackup) $ rm example.txt (pgbackup) $ git add . (pgbackup) $ git commit -m 'Implement S3 interactions'

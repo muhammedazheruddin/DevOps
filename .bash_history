@@ -520,3 +520,57 @@ git push -u origin master
 git status
 git checkout
 exit
+git add --all .
+git status
+git commit -m 'third commit linuxacademy'
+git remote add origin https://github.com/muhammedazheruddin/DevOps.git
+git push -u origin master
+cd python/CLI_SETUP/
+ls
+nano LocalStorage.txt
+nano WiringTogether.txt
+nano DistributingPackages.txt
+ls
+cd ..
+cd python/CLI_SETUP/
+mkdir Lab
+cd L
+cd Lab
+ls
+mkdir -p hr/src/hr
+cd hr
+ls
+touch src/hr/__init__.py
+touch README.rst
+pipenv --python python3.7
+ . /home/cloud_user/.local/share/virtualenvs/hr-cHYvMRRg/bin/activate
+vim setup.py
+ls
+vim src/hr/cli.py
+vim src/hr/user.py
+vim src/hr/export.py
+vim src/hr/cli.py 
+vim setup.py 
+exit
+pipenv shell
+pip 3.7 install --user -e .
+pip3.7 install --user -e .
+ . /home/cloud_user/.local/share/virtualenvs/hr-cHYvMRRg/bin/activate
+vim setup.py 
+exit
+pipenv shell
+pip3.7 install --user -e .
+vim setup.py 
+pip3.7 install --user -e .
+hr
+hr --help
+hr
+hr --format
+cd
+ls
+ssh cloud_user@3.234.206.12
+cd python/CLI_SETUP//Lab
+ls
+nano instruction.txt
+ls
+cd

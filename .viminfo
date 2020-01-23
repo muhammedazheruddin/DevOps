@@ -29,18 +29,29 @@ $
 # Registers:
 
 # File marks:
-'0  8  90  ~/python/CLI_SETUP/BuildingCLI.txt
-'1  1  7  ~/projects/pgbackup/README.md
-'2  16  0  ~/projects/pgbackup/setup.py
-'3  107  31  ~/python/CLI_SETUP/file.txt
-'4  129  0  ~/python/CLI_SETUP/file.txt
-'5  26  0  ~/python/CLI_SETUP/file.txt
-'6  2  0  ~/python/project_setup_CLI.txt
-'7  1  0  ~/python/debugging.py
-'8  6  28  ~/debugging.py
-'9  4  12  ~/debugging.py
+'0  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
+'1  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
+'2  27  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
+'3  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/export.py
+'4  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/user.py
+'5  9  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
+'6  22  0  ~/python/CLI_SETUP/Lab/hr/setup.py
+'7  8  90  ~/python/CLI_SETUP/BuildingCLI.txt
+'8  1  7  ~/projects/pgbackup/README.md
+'9  16  0  ~/projects/pgbackup/setup.py
 
 # Jumplist (newest first):
+-'  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
+-'  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
+-'  22  0  ~/python/CLI_SETUP/Lab/hr/setup.py
+-'  27  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
+-'  9  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
+-'  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/export.py
+-'  1  0  ~/python/CLI_SETUP/Lab/hr/src/hr/export.py
+-'  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/user.py
+-'  1  0  ~/python/CLI_SETUP/Lab/hr/src/hr/user.py
+-'  1  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
+-'  1  0  ~/python/CLI_SETUP/Lab/hr/setup.py
 -'  8  90  ~/python/CLI_SETUP/BuildingCLI.txt
 -'  1  0  ~/python/CLI_SETUP/BuildingCLI.txt
 -'  1  7  ~/projects/pgbackup/README.md
@@ -127,21 +138,40 @@ $
 -'  45  0  ~/CI-CD/orchestration/intro.txt
 -'  40  0  ~/CI-CD/orchestration/intro.txt
 -'  1  0  ~/CI-CD/orchestration/intro.txt
--'  45  97  ~/CI-CD/containers/Deployment_Docker_container_lab2.txt
--'  1  0  ~/CI-CD/containers/Deployment_Docker_container_lab2.txt
--'  48  158  ~/CI-CD/containers/dockerization_app_lab1.txt
--'  1  0  ~/CI-CD/containers/dockerization_app_lab1.txt
--'  6  129  ~/CI-CD/containers/jenkins_pipeline_CD_n_Dcoker_App.txt
--'  1  0  ~/CI-CD/containers/jenkins_pipeline_CD_n_Dcoker_App.txt
--'  41  28  ~/CI-CD/containers/build_docker.txt
--'  1  0  ~/CI-CD/containers/build_docker.txt
--'  19  0  ~/CI-CD/containers/intro.txt
--'  1  0  ~/CI-CD/containers/intro.txt
--'  29  102  ~/CI-CD/jenkins/jenkins_pipeline_lab2.txt
--'  1  0  ~/CI-CD/jenkins/jenkins_pipeline_lab2.txt
--'  96  69  ~/CI-CD/jenkins/jenkins_pipeline_lab1.txt
 
 # History of marks within files (newest to oldest):
+
+> ~/python/CLI_SETUP/Lab/hr/setup.py
+	"	17	34
+	^	17	35
+	.	17	34
+	+	11	27
+	+	10	32
+	+	21	0
+	+	18	12
+	+	17	34
+
+> ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
+	"	27	0
+	^	27	0
+	.	27	0
+	+	8	0
+	+	27	0
+
+> ~/python/CLI_SETUP/Lab/hr/src/hr/export.py
+	"	15	0
+	^	15	0
+	.	14	0
+	+	7	0
+	+	1	10
+	+	11	83
+	+	14	0
+
+> ~/python/CLI_SETUP/Lab/hr/src/hr/user.py
+	"	15	0
+	^	15	0
+	.	14	0
+	+	14	0
 
 > ~/python/CLI_SETUP/BuildingCLI.txt
 	"	8	90
