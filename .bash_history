@@ -655,3 +655,71 @@ exit
 pipenv shell
 cd
 ls
+git add --all .
+git commit -m 'fifth commit from LinuxAcademy'
+git push -u origin master
+cd python/WebDev/
+cd projects/notes/
+ls
+pipenv shell
+ . /home/cloud_user/.local/share/virtualenvs/notes-uMEkZ5vJ/bin/activate
+pipenv install psycopg2-binary Flask-SQLAlchemy Flask-Migrate
+vim models.py
+flask db init
+vim models.py
+vim __init__.py
+ls
+cd static/
+ls
+cd ..
+cd templates/
+ls
+cd ..
+fkasj dv ubut
+flask db init
+cd ..
+ls
+cd ..
+ls
+rm notes
+rm -r notes
+ls
+cat 1.VisualizingWebDev.txt 
+cat 2.
+cat 2.ProjectSetup.txt 
+ls
+nano CreatingFlaskApp.txt
+mv CreatingFlaskApp.txt 3.CreatingFlaskApp.txt
+ls
+cd python/WebDev/
+nano 4.ModelData.txt
+ls
+cd projects//notes/
+ls
+vim config.py 
+vim .env
+flask db init
+pipenv shell
+cd python/WebDev/projects/notes/
+cd python//WebDev//projects/notes/
+ . /home/cloud_user/.local/share/virtualenvs/notes-uMEkZ5vJ/bin/activate
+flask db init
+ls
+cd ..
+ls
+cd notes/
+ls
+vim config.py 
+vim __init__.py 
+vim .env 
+vim .env
+flas db init
+flask db init
+vim __init__.py 
+flask db init
+flask db migrate
+flask db upgrade
+flask db init
+exit
+pipenv shell
+cd

@@ -1,0 +1,113 @@
+Creating Python Flask App:
+==========================
+The first step in our web development process is to actually have a running application, but this application doesn't need to do anything at the start. In this lesson, we'll create our application, ensure that it can run, and configure it to connect to our PostgreSQL database.
+
+Documentation For This Video
+The Official Flask Tutorial - http://flask.pocoo.org/docs/1.0/tutorial/factory/
+SQLAlchemy - https://www.sqlalchemy.org/
+python-dotenv - https://github.com/theskumar/python-dotenv
+
+Our Application Factory
+There are a few different ways that we can go about creating Flask applications, but we're going to use the "application factory" approach. This approach is shown off in the official Flask tutorial and I really think it's a great way to get started. To begin, let's create an __init__.py in our notes project that will hold our application factory method:
+
+notes/__init__.py:
+
+import os
+
+from flask import Flask
+
+def create_app(test_config=None):
+    app = Flask(__name__)
+    app.config.from_mapping(
+        SECRET_KEY=os.environ.get('SECRET_KEY', default='dev'),
+    )
+
+    if test_config is None:
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        app.config.from_mapping(test_config)
+
+    return app
+There are a few things to note here:
+
+We're naming our Flask application based on the __name__ value which will correspond to the FLASK_APP environment variable.
+Our function can receive an optional test_config object so that it can be configured differently if we ever decide to write automated tests.
+The app.config.from_mapping call allows us to set configuration constants. We need to have a SECRET_KEY and we're setting that now, but should load a specific value from the environment when this application is deployed.
+The final thing that we need to do is return the application from the function so that the Flask CLI can run it.
+To run our application, we'll use the flask CLI after setting a few environment variables:
+
+(notes) $ export FLASK_ENV=development
+(notes) $ export FLASK_APP='.'
+(notes) $ flask run --host=0.0.0.0 --port=3000
+ * Serving Flask app "." (lazy loading)
+ * Environment: development
+ * Debug mode: on
+ * Running on http://0.0.0.0:3000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 143-698-723
+The flask CLI will automatically reload code for us as we're developing, and serve our application on port 3000. We'll want to leave this running, so let's connect to the workstation again in a separate terminal tab. We can currently see our empty Flask app by going to our server's public IP address on port 3000.
+
+We should receive a "Not Found" but that's fine. We haven't defined any routes yet, so there are no resources to find.
+
+Creating a Database
+For our note-taking application to be useful, we're going to need to be able to store data in a database. We'll be using a PostgreSQL database. If you've already created a PostgreSQL server to follow along with the CLI use case, then you can use that same server. If you haven't, then create a new CentOS 7 Cloud Playground and run the following commands after it's been spun up:
+
+$ curl -o db_setup.sh https://raw.githubusercontent.com/linuxacademy/content-python-for-sys-admins/master/helpers/db_setup.sh
+$ chmod +x db_setup.sh
+$ ./db_setup.sh
+During this process, the server will update itself, install Docker, create a PostgreSQL database, and expose it. You'll need to enter your sudo password at least once and you'll also need to pick a database username and password. There's a "sample" database populated with some information, but we won't be using that.
+
+While still connected to the Cloud Playground running the database, run the following command to create the notes database:
+
+NOTE: Set [POSTGRES_USER] to whatever you set it to when running db_setup.sh. For me, that's demo.
+
+$ sudo docker exec -i postgres psql postgres -U [POSTGRES_USER] -c "CREATE DATABASE notes;"
+Now we have a database that our new application can use.
+
+Configuring Database Access
+Before we conclude this lesson, we're going to add some configuration to our Flask application so that it can connect to our new notes database. Our application factory function already references a config.py file, and that's what we're going to create for holding on to our database configuration. We'll be using an "Object Relational Mapper" (ORM) to map our classes to tables in the database later in this project and our ORM has a very specific configuration value that it wants us to set: the SQLALCHEMY_DATABASE_URI value. This value will be the full URL that we need to connect to the database.
+
+Now that we know what we need to set up, let's create the config.py at the root of our project directory:
+
+notes/config.py
+
+import os
+
+db_host = os.environ.get('DB_HOST', default='localhost')
+db_name = os.environ.get('DB_NAME', default='notes')
+db_user = os.environ.get('DB_USERNAME', default='notes')
+db_password = os.environ.get('DB_PASSWORD', default='')
+db_port = os.environ.get('DB_PORT', default='5432')
+
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+SQLALCHEMY_DATABASE_URI = f"postgres://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+We've provided a way for ourselves to use environment variables to configure how we're connecting to the database. In the process, we've also set some defaults that make sense for when you'd be developing this web application on a local workstation, but they don't work for us. We'll need to set the DB_USERNAME, DB_PASSWORD, DB_HOST, and DB_PORT. For the DB_HOST we'll use the public IP address and then also set the DB_PORT to 80 if we're developing on our local machine.
+
+Lastly, in a new terminal session connected to our workstation, we'll export these environment variables so that they'll be used when we run the application. To make it easier on ourselves each time we open the project, we'll put these in a .env file:
+
+notes/.env:
+
+export DB_USERNAME='demo'
+export DB_PASSWORD='secure_password'
+export DB_HOST='<PUBLIC_IP>'
+export DB_PORT='80'
+export FLASK_ENV='development'
+export FLASK_APP='.'
+The .env file is already in our .gitignore file, so we don't have to worry about committing our username and password into our repository. Let's make sure that we can still start the application:
+
+(notes) $ source .env
+(notes) $ flask run --host=0.0.0.0 --port=3000
+ * Tip: There are .env files present. Do "pip install python-dotenv" to use them.
+ * Serving Flask app "." (lazy loading)
+ * Environment: development
+ * Debug mode: on
+ * Running on http://0.0.0.0:3000/ (Press CTRL+C to quit)
+ * Restarting with stat
+ * Tip: There are .env files present. Do "pip install python-dotenv" to use them.
+ * Debugger is active!
+ * Debugger PIN: 143-698-723
+Notice that it's suggesting that we install python-dotenv to have it use the .env file by default. Let's do this by adding it as a development dependency to our project:
+
+(notes) $ pipenv install --dev python-dotenv ... Now when we perform a flask run, it will automatically read in the 
+environment variable within the .env file.

@@ -11,8 +11,10 @@
 $
 
 # Command Line History (newest to oldest):
-:q
 :wq
+:qall
+:q
+:e __init__.py
 :q!
 :Q!
 :wq!
@@ -29,25 +31,33 @@ $
 # Registers:
 
 # File marks:
-'0  6  16  ~/.env
-'1  11  92  ~/config.py
-'2  2  19  ~/.env
-'3  1  0  ~/python/WebDev/projects/notes/config.py
-'4  17  0  ~/python/WebDev/projects/notes/__init__.py
-'5  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
-'6  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
-'7  27  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
-'8  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/export.py
-'9  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/user.py
+'0  24  0  ~/python/WebDev/projects/notes/__init__.py
+'1  2  0  ~/python/WebDev/projects/notes/.env
+'2  1  92  ~/python/WebDev/projects/notes/.env
+'3  5  52  ~/python/WebDev/projects/notes/config.py
+'4  1  0  ~/python/WebDev/projects/notes/.env
+'5  3  52  ~/python/WebDev/projects/notes/config.py
+'6  19  4  ~/python/WebDev/projects/notes/models.py
+'7  6  16  ~/.env
+'8  11  92  ~/config.py
+'9  2  19  ~/.env
 
 # Jumplist (newest first):
+-'  24  0  ~/python/WebDev/projects/notes/__init__.py
+-'  2  0  ~/python/WebDev/projects/notes/.env
+-'  1  92  ~/python/WebDev/projects/notes/.env
+-'  5  52  ~/python/WebDev/projects/notes/config.py
+-'  3  52  ~/python/WebDev/projects/notes/config.py
+-'  1  0  ~/python/WebDev/projects/notes/config.py
+-'  20  28  ~/python/WebDev/projects/notes/__init__.py
+-'  19  4  ~/python/WebDev/projects/notes/models.py
+-'  1  0  ~/python/WebDev/projects/notes/models.py
 -'  6  16  ~/.env
 -'  11  92  ~/config.py
 -'  2  19  ~/.env
 -'  1  0  ~/.env
 -'  1  0  ~/config.py
--'  1  0  ~/python/WebDev/projects/notes/config.py
--'  17  0  ~/python/WebDev/projects/notes/__init__.py
+-'  23  0  ~/python/WebDev/projects/notes/__init__.py
 -'  1  0  ~/python/WebDev/projects/notes/__init__.py
 -'  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
 -'  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
@@ -130,16 +140,48 @@ $
 -'  1  0  ~/python/Working_with_python_comment.txt
 -'  43  11  ~/python/working_with
 -'  1  0  ~/python/working_with
--'  30  0  ~/python/Working_with_REPL.txt
--'  1  0  ~/python/Working_with_REPL.txt
--'  48  0  ~/python/setting_up_Environment.txt
--'  1  0  ~/python/setting_up_Environment.txt
--'  35  235  ~/python/IDE_Pickeing.txt
--'  1  0  ~/python/IDE_Pickeing.txt
--'  42  29  ~/python/install_ubuntu.txt
--'  1  0  ~/python/install_ubuntu.txt
 
 # History of marks within files (newest to oldest):
+
+> ~/python/WebDev/projects/notes/__init__.py
+	"	24	0
+	^	20	29
+	.	20	28
+	+	3	23
+	+	23	0
+	+	11	0
+	+	21	0
+	+	19	19
+	+	4	32
+	+	20	28
+
+> ~/python/WebDev/projects/notes/.env
+	"	2	0
+	^	2	0
+	.	1	14
+	+	1	14
+
+> ~/python/WebDev/projects/notes/config.py
+	"	5	52
+	^	5	53
+	.	5	52
+	+	5	52
+
+> ~/python/WebDev/projects/notes/models.py
+	"	19	4
+	^	19	75
+	.	19	74
+	+	5	22
+	+	18	114
+	+	14	4
+	+	13	9
+	+	15	35
+	+	16	0
+	+	17	0
+	+	18	0
+	+	16	23
+	+	11	62
+	+	19	74
 
 > ~/.env
 	"	6	16
@@ -165,17 +207,6 @@ $
 	+	6	54
 	+	7	50
 	+	11	92
-
-> ~/python/WebDev/projects/notes/config.py
-	"	1	0
-
-> ~/python/WebDev/projects/notes/__init__.py
-	"	17	0
-	^	17	0
-	.	10	0
-	+	3	23
-	+	17	0
-	+	10	0
 
 > ~/python/CLI_SETUP/Lab/hr/setup.py
 	"	17	34

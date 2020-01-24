@@ -1,0 +1,127 @@
+Modelling data with an object-relational mapper Python Flask App:
+==============================================================================
+Now that we have our base application structure, we're going to create the models to store the notes that we're going to be writing with our application.
+
+Documentation For This Video
+Flask Database Tutorial - http://flask.pocoo.org/docs/1.0/tutorial/database/
+SQLAlchemy - https://www.sqlalchemy.org/
+Flask-SQLAlchemy - http://flask-sqlalchemy.pocoo.org/2.3/
+psycopg2 - http://initd.org/psycopg/
+Flask-Migrate - https://flask-migrate.readthedocs.io/en/latest/
+
+Installing SQLAlchemy
+Before we start our database modeling, we need to install a few dependencies. Let's add Flask-SQLAlchemy, Flask-Migrate, and psycopg2:
+
+(notes) $ pipenv install psycopg2-binary Flask-SQLAlchemy Flask-Migrate
+...
+Now we're ready to start modeling some data.
+
+Modeling a User
+Since we're using an object-oriented language, we would really like to work with objects, but relational databases are all about rows. Thankfully, "object-relational mappers" (or ORMs) allow us to map rows from relational databases into instances of classes. For our application, we have two pieces of data that we need to model:
+
+User: An individual that is logged into the application.
+Note: An individual note that a User has created.
+There are many ways that we could go about creating these, but we're going to define both of the classes in the same file, our models.py. Let's create a User class:
+
+notes/models.py:
+
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(200))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+We're doing a few things here. First, we're importing SQLAlchemy from the flask_sqlalchemy package so that we can create an instance to use as our db. This db object will be important for us to connect to the database in our application. Next, we create the User class that inherits from the db.Model class. By inheriting from db.Model we're gaining some functionality that SQLAlchemy provides. Now, we need to define some fields on our class itself. These are columns, and when we read an item in from the database, these columns will be read and get assigned to the attribute on the instance. The created_at and updated_at fields are special in that we don't want to explicitly have to set them, so we have the database server running some functions to automatically set and update the rows.
+
+We also need to model a Note, so let's add this in the same file below our User class:
+
+notes/models.py:
+
+# User omitted
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    body = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+Our Note model is fairly simple, only showing the additional db.Text field option for a field that can hold a large amount of text. To make our models as useful as possible, we also want to tie them together because a User will own many Notes.
+
+Creating Model Associations
+We're trying to create a one-to-many relationship because one User can have many Notes. To model this in our database, we will have the notes table contain a user_id column to point to the User that it belongs to. To tie database models together when using an ORM, we need to create a "relationship" on the User and a new column on the Note:
+
+notes/models.py:
+
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(200))
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    notes = db.relationship('Note', backref='author', lazy=True)
+
+class Note(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    body = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+Looking at the relationship set on the User, we specify that the items should use the Note class. The backref key says to add an attribute on the Note instance that points back to the User that owns it. The lazy attribute allows us to state that we don't want to fetch all of the notes every time we get fetch a User.
+
+On the Note class, we're defining a column with a foreign key constraint on user.id. This means that the user_id value needs to map to a valid row in the user table.
+
+Registering our Database with Our Application
+With the data modeled, we need to use our db within our application factory. From within the function, we'll need to import db, initialize it with the configuration that the application has read in, and finally, utilize Flask-Migrate to run database migrations for us. Migrate will allow us to iterate on our database schema easily.
+
+notes/__init__.py:
+
+import os
+
+from flask import Flask
+from flask_migrate import Migrate
+
+def create_app(test_config=None):
+    app = Flask(__name__)
+    app.config.from_mapping(
+        SECRET_KEY=os.environ.get('SECRET_KEY', default='dev'),
+    )
+
+    if test_config is None:
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        app.config.from_mapping(test_config)
+
+    from .models import db
+
+    db.init_app(app)
+    migrate = Migrate(app, db)
+
+    return app
+With our application factory ready to work, let's create our migrations using some of the additional commands added to the Flask CLI by Flask-Migrate. We'll initialize a migrations directory with one command and have Flask-Migrate create our initial migration based on our current models' structures.
+
+(notes) $ flask db init
+  Creating directory /home/cloud_user/projects/notes/migrations ... done
+  Creating directory /home/cloud_user/projects/notes/migrations/versions ... done
+  Generating /home/cloud_user/projects/notes/migrations/README ... done
+  Generating /home/cloud_user/projects/notes/migrations/alembic.ini ... done
+  Generating /home/cloud_user/projects/notes/migrations/env.py ... done
+  Generating /home/cloud_user/projects/notes/migrations/script.py.mako ... done
+  Please edit configuration/connection/logging settings in '/home/cloud_user/projects/notes/migrations/alembic.ini' before proceeding.
+(notes) $ flask db migrate
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.autogenerate.compare] Detected added table 'user'
+INFO  [alembic.autogenerate.compare] Detected added table 'note'
+  Generating /home/cloud_user/projects/notes/migrations/versions/da4d0c35ae3f_.py ... done (notes) $ flask db upgrade 
+INFO [alembic.runtime.migration] Context impl PostgresqlImpl. INFO [alembic.runtime.migration] Will assume 
+transactional DDL. INFO [alembic.runtime.migration] Running upgrade -> da4d0c35ae3f, empty message Now our database 
+has note and user tables. We've successfully modeled our information and we're ready to move onto adding web 
+functionality for people to register and log in and also to create their own notes.
