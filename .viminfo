@@ -11,13 +11,15 @@
 $
 
 # Command Line History (newest to oldest):
-:wq
-:qall
-:q
-:e __init__.py
 :q!
-:Q!
+:q
+:wq
 :wq!
+:e config.py
+:e vim config.py
+:qall
+:e __init__.py
+:Q!
 
 # Search String History (newest to oldest):
 ? \s\+$
@@ -31,33 +33,44 @@ $
 # Registers:
 
 # File marks:
-'0  24  0  ~/python/WebDev/projects/notes/__init__.py
-'1  2  0  ~/python/WebDev/projects/notes/.env
-'2  1  92  ~/python/WebDev/projects/notes/.env
-'3  5  52  ~/python/WebDev/projects/notes/config.py
-'4  1  0  ~/python/WebDev/projects/notes/.env
-'5  3  52  ~/python/WebDev/projects/notes/config.py
-'6  19  4  ~/python/WebDev/projects/notes/models.py
-'7  6  16  ~/.env
-'8  11  92  ~/config.py
-'9  2  19  ~/.env
+'0  234  957  ~/python/WebDev/7.CRUD_Operation.txt
+'1  28  0  ~/python/WebDev/6.UserAuthentication.txt
+'2  1  0  ~/python/WebDev/6.
+'3  6  7  ~/python/WebDev/projects/notes/models.py
+'4  11  22  ~/python/WebDev/projects/notes/config.py
+'5  3  29  ~/python/WebDev/projects/notes/.env
+'6  6  18  ~/python/WebDev/projects/notes/.env
+'7  3  39  ~/python/WebDev/projects/notes/__init__.py
+'8  1  0  ~/python/WebDev/projects/notes/__
+'9  5  51  ~/python/WebDev/projects/notes/config.py
 
 # Jumplist (newest first):
--'  24  0  ~/python/WebDev/projects/notes/__init__.py
--'  2  0  ~/python/WebDev/projects/notes/.env
--'  1  92  ~/python/WebDev/projects/notes/.env
--'  5  52  ~/python/WebDev/projects/notes/config.py
+-'  234  957  ~/python/WebDev/7.CRUD_Operation.txt
+-'  1  0  ~/python/WebDev/7.CRUD_Operation.txt
+-'  28  0  ~/python/WebDev/6.UserAuthentication.txt
+-'  1  0  ~/python/WebDev/6.UserAuthentication.txt
+-'  1  0  ~/python/WebDev/6.
+-'  6  7  ~/python/WebDev/projects/notes/models.py
+-'  19  4  ~/python/WebDev/projects/notes/models.py
+-'  11  22  ~/python/WebDev/projects/notes/config.py
+-'  5  51  ~/python/WebDev/projects/notes/config.py
+-'  3  29  ~/python/WebDev/projects/notes/.env
+-'  6  18  ~/python/WebDev/projects/notes/.env
+-'  1  0  ~/python/WebDev/projects/notes/.env
+-'  3  39  ~/python/WebDev/projects/notes/__init__.py
+-'  28  0  ~/python/WebDev/projects/notes/__init__.py
+-'  1  0  ~/python/WebDev/projects/notes/__
+-'  4  0  ~/python/WebDev/projects/notes/.env
 -'  3  52  ~/python/WebDev/projects/notes/config.py
 -'  1  0  ~/python/WebDev/projects/notes/config.py
 -'  20  28  ~/python/WebDev/projects/notes/__init__.py
--'  19  4  ~/python/WebDev/projects/notes/models.py
 -'  1  0  ~/python/WebDev/projects/notes/models.py
 -'  6  16  ~/.env
 -'  11  92  ~/config.py
 -'  2  19  ~/.env
 -'  1  0  ~/.env
 -'  1  0  ~/config.py
--'  23  0  ~/python/WebDev/projects/notes/__init__.py
+-'  27  0  ~/python/WebDev/projects/notes/__init__.py
 -'  1  0  ~/python/WebDev/projects/notes/__init__.py
 -'  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
 -'  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
@@ -131,46 +144,25 @@ $
 -'  33  6  ~/python/working_with_variables.txt
 -'  1  0  ~/python/working_with_variables.txt
 -'  13  176  ~/python/working_with_boolean.txt
--'  1  0  ~/python/working_with_boolean.txt
--'  42  60  ~/python/working_with_python_number.txt
--'  1  0  ~/python/working_with_python_number.txt
--'  66  17  ~/python/working_with_python_string.txt
--'  1  0  ~/python/working_with_python_string.txt
--'  16  2  ~/python/Working_with_python_comment.txt
--'  1  0  ~/python/Working_with_python_comment.txt
--'  43  11  ~/python/working_with
--'  1  0  ~/python/working_with
 
 # History of marks within files (newest to oldest):
 
-> ~/python/WebDev/projects/notes/__init__.py
-	"	24	0
-	^	20	29
-	.	20	28
-	+	3	23
-	+	23	0
-	+	11	0
-	+	21	0
-	+	19	19
-	+	4	32
-	+	20	28
+> ~/python/WebDev/7.CRUD_Operation.txt
+	"	234	957
+	^	234	958
+	.	234	924
+	+	234	924
 
-> ~/python/WebDev/projects/notes/.env
-	"	2	0
-	^	2	0
-	.	1	14
-	+	1	14
+> ~/python/WebDev/6.UserAuthentication.txt
+	"	28	0
 
-> ~/python/WebDev/projects/notes/config.py
-	"	5	52
-	^	5	53
-	.	5	52
-	+	5	52
+> ~/python/WebDev/6.
+	"	1	0
 
 > ~/python/WebDev/projects/notes/models.py
-	"	19	4
-	^	19	75
-	.	19	74
+	"	6	7
+	^	6	8
+	.	6	8
 	+	5	22
 	+	18	114
 	+	14	4
@@ -181,7 +173,62 @@ $
 	+	18	0
 	+	16	23
 	+	11	62
-	+	19	74
+	+	19	12
+	+	18	15
+	+	17	14
+	+	16	8
+	+	15	10
+	+	14	6
+	+	11	11
+	+	10	16
+	+	9	16
+	+	8	13
+	+	7	14
+	+	6	8
+
+> ~/python/WebDev/projects/notes/config.py
+	"	11	22
+	^	11	23
+	.	11	23
+	+	5	55
+	+	5	51
+	+	3	8
+	+	4	8
+	+	5	8
+	+	6	12
+	+	7	7
+	+	10	30
+	+	11	23
+
+> ~/python/WebDev/projects/notes/.env
+	"	3	29
+	^	3	30
+	.	3	29
+	+	1	14
+	+	6	22
+	+	1	15
+	+	6	18
+	+	2	36
+	+	3	29
+
+> ~/python/WebDev/projects/notes/__init__.py
+	"	3	39
+	^	3	40
+	.	3	39
+	+	3	23
+	+	27	0
+	+	11	0
+	+	25	0
+	+	19	19
+	+	4	32
+	+	20	28
+	+	9	23
+	+	20	30
+	+	24	45
+	+	3	39
+
+> ~/python/WebDev/projects/notes/__
+	"	1	0
 
 > ~/.env
 	"	6	16

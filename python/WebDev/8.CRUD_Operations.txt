@@ -1,0 +1,186 @@
+Implementing Notes CRUD - Updating and Deleting
+================================================
+
+The last two CRUD features that we need to implement are "update" and "delete". In this lesson, we'll add views to allow a user to edit, update, and delete their own notes.
+
+Documentation For This Video
+Flask-SQLAlchemy Select, Insert, Delete - http://flask-sqlalchemy.pocoo.org/2.3/queries/#select-insert-delete
+
+Editing and Updating a Note
+Editing and updating a note isn't much different from creating a note, but it does give us the ability to use dynamic routes that contain variables. We'll almost use the exact same template. Let's create our note_update view now:
+
+notes/__init__.py:
+
+# Imports omitted
+
+def create_app(test_config=None):
+    # Earlier code omitted
+
+    db.init_app(app)
+    migrate = Migrate(app, db)
+
+    def require_login(view):
+        @functools.wraps(view)
+        def wrapped_view(**kwargs):
+            if not g.user:
+                return redirect(url_for('log_in'))
+            return view(**kwargs)
+        return wrapped_view
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
+
+    # Earlier views omitted
+
+    @app.route('/notes/<note_id>/edit')
+    @require_login
+    def note_update(note_id):
+        note = Note.query.filter_by(user_id=g.user.id, id=note_id).first_or_404()
+        return render_template('note_update.html', note=note)
+
+    return app
+This is the first time that we've taken in user input in our routes, so we need to handle potential 404 errors if the object that the user is requesting doesn't exist, or they don't have access to it. In this case, we can search for a Note, with the proper user_id, and id using the first_or_404 feature of Flask-SQLAlchemy. By using this, if the object is not found, then we'll stop processing the current view and instead abort with a 404 error. To make that fit with our application, we created another view called page_not_found, and registered it as the errorhandler for 404 errors thrown by our application.
+
+Let's take a look at the template that we're rendering now:
+
+notes/templates/note_update.html:
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <h1 class="is-size-3">Edit Note: {{ note.title }}</h1>
+
+  <form action="{{ url_for('note_update', note_id=note.id) }}" method="PATCH">
+    <div class="field">
+      <label class="label" for="title">Title</label>
+      <div class="control">
+        <input name="title" value="{{ request.form['title'] or note.title }}" class="input"></input>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="label" for="body">Body (Supports Markdown)</label>
+      <div class="control">
+        <textarea name="body" class="textarea has-text-monospaced">{{ request.form['body'] or note.body }}</textarea>
+      </div>
+    </div>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <input type="submit" value="Update Note" class="button is-primary" />
+      </div>
+      <div class="control">
+        <a href="{{ url_for('note_index') }}" class="button is-text">Cancel</a>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
+This form is almost exactly like the creation form, but we needed to change the method to PATCH. We could potentially be doing a partial update to a note when we submit the form. The action also had to change, and this is a good opportunity to look at how url_for works when we have an argument in the URL. Lastly, we're setting the values of the title's input and the body's textarea to be either the value from the request or the existing value on the note variable. We're using this approach so that the user doesn't lose all of their edits if there is a validation error when we go to handle the update. Nobody wants to have to start over when there's a form error.
+
+Let's go ahead and implement the update handling now:
+
+notes/__init__.py:
+
+# Imports omitted
+
+def create_app(test_config=None):
+    # Earlier code omitted
+
+    @app.route('/notes/<note_id>/edit', methods=('GET', 'PATCH'))
+    @require_login
+    def note_update(note_id):
+        note = Note.query.filter_by(user_id=g.user.id, id=note_id).first_or_404()
+        if request.method == 'PATCH':
+            title = request.form['title']
+            body = request.form['body']
+            error = None
+
+            if not title:
+                error = 'Title is required.'
+
+            if not error:
+                note.title = title
+                note.body = body
+                db.session.add(note)
+                db.session.commit()
+                flash(f"Successfully updated note: '{title}'", 'success')
+                return redirect(url_for('note_index'))
+
+            flash(error, 'error')
+
+        return render_template('note_update.html', note=note)
+
+    return app
+There's only one real big difference between between what we're doing in this view and in the note_create view. We're reassigning the title and body on an existing Note before adding it to the list of updates to make, instead of creating a whole new object. Now when we go to our edit page and submit the form with differences, we can see that it's just sending us back to the edit page without changing anything and our URL has all of the contents of our form. What happened?
+
+While PATCH is the proper HTTP method to use when partially updating a model, it doesn't work in HTML form tags. In this case, we'll adjust the form to have a POST method instead and we'll change our view to handle GET, POST, and PATCH.
+
+Note: Be sure to change the method in templates/note_update.html to POST first.
+
+notes/__init__.py:
+
+# Imports omitted
+
+def create_app(test_config=None):
+    # Earlier code omitted
+
+    @app.route('/notes/<note_id>/edit', methods=('GET', 'POST', 'PATCH'))
+    @require_login
+    def note_update(note_id):
+        note = Note.query.filter_by(user_id=g.user.id, id=note_id).first_or_404()
+        if request.method in ['POST', 'PATCH']:
+            title = request.form['title']
+            body = request.form['body']
+            error = None
+
+            if not title:
+                error = 'Title is required.'
+
+            if not error:
+                note.title = title
+                note.body = body
+                db.session.add(note)
+                db.session.commit()
+                flash(f"Successfully updated note: '{title}'", 'success')
+                return redirect(url_for('note_index'))
+
+            flash(error, 'error')
+
+        return render_template('note_update.html', note=note)
+
+    return app
+Now if we refresh the edit page so that the HTML changes and then we submit some changes we should see them happen as expected. We're supporting both POST and PATCH because it's the right thing to do.
+
+Deleting a Note
+The last thing that we're going to do is handle the deleting of a note. To do this, we're going to have a view for both GET and DELETE, without a template. We will utilize first_or_404 again, and then once we have the note we'll use db.session.delete(note) to get rid of it before redirecting back to the note index page. Let's add the code now:
+
+notes/__init__.py:
+
+# Imports omitted
+
+def create_app(test_config=None):
+    # Earlier code omitted
+
+    @app.route('/notes/<note_id>/delete', methods=('GET', 'DELETE'))
+    @require_login
+    def note_delete(note_id):
+        note = Note.query.filter_by(user_id=g.user.id, id=note_id).first_or_404()
+        db.session.delete(note)
+        db.session.commit()
+        flash(f"Successfully deleted note: '{note.title}'", 'success')
+        return redirect(url_for('note_index'))
+
+    return app
+We should edit the delete links within note_index.html to use url_for('note_delete', note_id=note.id), and then we'll be able to delete a note from the note index page.
+
+We've successfully implemented all of the CRUD functionality for our notes and now we have a working application. There's more we could do to improve security and add additional functionality, but this project has done a good job of showing us how web development in general works, and some of the things that we have to consider when writing web-based applications.
+
+Additional Learning Flask is a great micro-framework and was good for forcing us to explicitly implement the features 
+that we needed. There are larger frameworks that will do more of the work for you such as Django and you can see this 
+same application implemented with Django by heading here. One of the main other things that you might be interested in 
+would be implementing web APIs using JSON. To serve up JSON from your application you'll want to use the jsonify 
+function in Flask. It can handle lists and dictionaries and will convert them into JSON before returning them. Head 
+here to learn more about this feature of the framework.

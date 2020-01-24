@@ -723,3 +723,45 @@ flask db init
 exit
 pipenv shell
 cd
+git add --all .
+git commit -m 'Sixth Push LinuxAcademy'
+git push -u origin master
+pipenv shell
+ . /home/cloud_user/.local/share/virtualenvs/notes-uMEkZ5vJ/bin/activate
+vim .env
+ls
+vim __init__.py 
+vim config.py 
+flask run --host=0.0.0.0 --port=3000
+ls
+cd python/WebDev/projects/notes/
+ . /home/cloud_user/.local/share/virtualenvs/notes-uMEkZ5vJ/bin/activate
+ls
+flask db init
+vim .env
+flask db init
+ls
+cd ..
+flask db init
+cd notes/
+flask db init
+vim config.py 
+flask db init
+vim models.py
+flask db init
+exit
+pipenv shell
+cd ..
+ls
+nano 5.UserRegistration.txt
+nano 6.UserAuthentication.txt
+ls
+vim 6.
+vim 6.UserAuthentication.txt 
+vim 7.CRUD_Operation.txt
+nano 7.CRUD_Operation.txt
+nano 8.CRUD_Operations.txt
+ls
+cd
+git add --all .
+git push -u origin master

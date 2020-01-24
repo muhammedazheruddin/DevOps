@@ -1,0 +1,123 @@
+Building User Autherincation Form:
+=================================
+
+Continuing where we left off in the previous lesson, we'll be adding user authentication to our application now that we have the ability to create a User.
+
+Documentation For This Video
+Flask 'Blueprints and Views' Tutorial - http://flask.pocoo.org/docs/1.0/tutorial/views/
+Flask 'Templates' Tutorial - http://flask.pocoo.org/docs/1.0/tutorial/templates/
+Werkzeug - http://werkzeug.pocoo.org/
+Course's GitHub Repository (branch: use-case-web-app) - http://werkzeug.pocoo.org/
+
+
+
+Logging In
+With our user in the database, we're ready to log in. Let's start by creating the view. We're going to duplicate the sign_up.html as log_in.html and then modify a few things:
+
+templates/log_in.html:
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="columns is-desktop">
+  <div class="column"></div>
+  <div class="column is-half-desktop">
+    <h2 class="is-size-3">Log In</h2>
+
+    <form method="post" action="{{ url_for('log_in') }}">
+      <div class="field">
+        <label class="label" for="username">Username</label>
+        <div class="control">
+          <input name="username" type="input" class="input" required></input>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="password">Password</label>
+        <div class="control">
+          <input name="password" type="password" class="input" required></input>
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <input type="submit" value="Log In" class="button is-link" />
+        </div>
+        <div class="control">
+          <a href="{{ url_for('sign_up') }}" class="button is-text">
+            Don't have an account? Sign Up.
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="column"></div>
+</div>
+
+{% endblock %}
+Besides changing some of the wording around and linking back to the sign-up page, we really only needed to change the action of our form. We could actually leave this off and the browser would automatically submit the form to the same URL, but I like to be explicit. Make sure to also go back into the sign_up.html form and add a url_for('log_in') there for the "Already have an account?" link.
+
+Next, let's implement the log_in view:
+
+import os
+
+from flask import Flask, render_template, redirect, url_for, request, session, flash
+from flask_migrate import Migrate
+from werkzeug.security import generate_password_hash, check_password_hash
+
+def create_app(test_config=None):
+    # Previous code omitted
+
+    @app.route('/log_in', methods=('GET', 'POST'))
+    def log_in():
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            error = None
+
+            user = User.query.filter_by(username=username).first()
+
+            if not user or not check_password_hash(user.password, password):
+                error = 'Username or password are incorrect'
+
+            if error is None:
+                session.clear()
+                session['user_id'] = user.id
+                return redirect(url_for('index'))
+
+            flash(error, category='error')
+        return render_template('log_in.html')
+
+    @app.route('/')
+    def index():
+        return 'Index'
+
+    return app
+We needed to import check_password_hash, the sister function to generate_password_hash, so that we could verify that the password passed in by the user and the hashed password in the database match. Additionally, we need to import session so that we can store information about the user between requests. The session object is a dictionary that our Flask app stores as a cookie in the user's browser. To validate the login attempt, we do two things:
+
+Find the user in the database based on the username. If we can't find the user then something is wrong.
+Use check_password_hash to ensure that user.password is the hashed version of the password that the user submitted.
+We write this as a compound conditional because we want to show the same message if something goes wrong. There's no need for us to be more specific because that just makes it easier for people to check to see if certain usernames exist in our system.
+
+Finally, if there is not an error. We clear any existing session that might exist, and then add the user_id so that we can look up the user based on the session later.
+
+Logging Out
+Compared to signing up or logging in, logging out is pretty simple. We just need to remove our user information from the session. The /log_out route should work for a GET request, but also from a DELETE request because we're "deleting" the session. Let's add this route and view now:
+
+# imports omitted
+
+def create_app(test_config=None):
+    # Previous code omitted
+
+    @app.route('/log_out', methods=('GET', 'DELETE'))
+    def log_out():
+        session.clear()
+        flash('Successfully logged out.', 'success')
+        return redirect(url_for('log_in'))
+
+    return app
+Now if we log in and then navigate to /log_out we should be redirected back to the /log_in path with a success message showing.
+
+Adding sign up and authentication to our application has forced us to learn a lot about how Flask views, templates, 
+and sessions work. From here, we're ready to add the main feature to our application: note taking!

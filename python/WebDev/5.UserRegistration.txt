@@ -1,0 +1,239 @@
+Building Registration Form:
+===========================
+Being able to connect to the database allows us to persist data made by our requests. But we first need to start adding some routes and view functions in order to add functionality to our application. In this lesson, we'll add the routes and views that will let a person to create an account, log in, and log out.
+
+Documentation For This Video
+Flask 'Blueprints and Views' Tutorial - http://flask.pocoo.org/docs/1.0/tutorial/views/
+Flask 'Templates' Tutorial - http://flask.pocoo.org/docs/1.0/tutorial/templates/
+Werkzeug - http://werkzeug.pocoo.org/
+Course's GitHub Repository (branch: use-case-web-app) - https://github.com/linuxacademy/content-intro-to-python-development.git
+
+Creating Our First View
+Web applications work by routing requests to specific pieces of code on the server, based on the combination of HTTP method and the path. These combinations are often called "routes." In Flask, the code that is run for a given route is called its "view." For the time being, we're going to define all of our views within our __init__.py file. Let's start by defining a function inside of our create_app function to handle a GET request to the /sign_up path. We'll define our view functions after our migrate = Migrate(app, db) line, but before we run return app.
+
+notes/__init__.py:
+
+import os
+
+from flask import Flask, render_template
+from flask_migrate import Migrate
+
+def create_app(test_config=None):
+    # previous code omitted
+    db.init_app(app)
+    migrate = Migrate(app, db)
+
+    @app.route('/sign_up')
+    def sign_up():
+        return render_template('sign_up.html')
+    return app
+To assign a view function to a route, we'll use the app.route method to decorate the function. This allows the app that we return to run this function, even though we didn't add it to the class itself. The app will run the function when the app receives a request to the /sign_up path. From within the view, we want to render some HTML to the page with a form for the user to fill out in order to sign up for an account. To render this HTML, we'll import the render_template function from Flask and then pass it the name of our template (that doesn't exist yet). If we navigate to our server's public IP address on port 3000, with the path of /sign_up, we should now see that there's a jinja2.exceptions.TemplateNotFound being raised. This shows that our function is being run, and now we just need to create this template.
+
+The Sign Up Template
+By default, Flask will try to search for template files in the templates directory and serve static assets from the static directory (CSS, JavaScript, images, etc.). We'll access these files by cloning the content repository for this course into a temporary directory, changing the branch, and then moving the starter_templates and starter_static directories:
+
+(notes) $ cd /tmp
+(notes) $ git clone https://github.com/linuxacademy/content-intro-to-python-development.git
+...
+(notes) $ cd content-intro-to-python-development
+(notes) $ git checkout use-case-web-app
+...
+(notes) $ cp -R starter_templates ~/projects/notes/templates
+(notes) $ cp -R starter_static ~/projects/notes/static
+It's beyond the scope of this course to teach HTML and CSS, but we'll cover how Jinja is used for adding dynamic content to HTML files. We've pre-created some templates to download, and we can go through them to understand what's going on. Let's take a look at templates/base.html, which holds onto the layout for our web application and code that needs to be on most pages:
+
+notes/templates/base.html:
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Markdown Notes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bulma.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='highlight.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  </head>
+  <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="container">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="#">Notes</a>
+
+          <div class="navbar-burger" data-target="navMenu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+        <div class="navbar-menu" id="navMenu">
+          <div class="navbar-end">
+            {% if g.user %}
+              <a class="navbar-item" href="#" aria-label="New Note">
+                <i class="far fa-plus-square"></i>
+              </a>
+              <a class="navbar-item"  href="#">
+                Log Out
+              </a>
+            {% else %}
+              <a class="navbar-item" href="#">
+                Log In
+              </a>
+              <a class="navbar-item" href="{{ url_for('sign_up') }}">
+                Sign Up
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+    {% if get_flashed_messages() %}
+      <div class="container">
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+          <div id="message{{ loop.index }}">
+            {% if category %}
+              {% if category == 'error' %}
+                <div class="notification is-danger">
+              {% elif category == 'warning' %}
+                <div class="notification is-warning">
+              {% elif category == 'success' %}
+                <div class="notification is-success">
+              {% else %}
+                <div class="notification">
+              {% endif %}
+            {% else %}
+              <div class="notification">
+            {% endif %}
+              <button class="delete" data-target="message{{ loop.index }}" aria-label="delete"></button>
+              {{ message }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <section class="section">
+      <div class="container">
+        {% block content %}
+        {% endblock %}
+      </div>
+    </section>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script src="{{ url_for('static', filename='highlight.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
+There's quite a bit going on here, but the big things to notice are:
+
+We occasionally use blocks that start with {% and end with %}. These blocks allow us to define sections that other templates can fill, and to add control flow logic to our views such as looping and conditional logic.
+When we need to put values from Python into the HTML, we use blocks that start with {{ and end with }}.
+Flask templates automatically have access to some functions and objects such as get_flashed_messages, url_for, and the g object.
+From each of our views, we can specify that we "extend" this base view and fill in any blocks of the template that we'd like. We do this in our templates/sign_up.html:
+
+notes/templates/sign_up.html*:
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="columns is-desktop">
+  <div class="column"></div>
+  <div class="column is-half-desktop">
+    <h2 class="is-size-3">Sign Up</h2>
+
+    <form method="post" action="{{ url_for('sign_up') }}">
+      <div class="field">
+        <label class="label" for="username">Username</label>
+        <div class="control">
+          <input name="username" type="input" class="input" required></input>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="password">Password</label>
+        <div class="control">
+          <input name="password" type="password" class="input" required></input>
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <input type="submit" value="Sign Up" class="button is-link" />
+        </div>
+        <div class="control">
+          <a href="#" class="button is-text">
+            Already have an account? Log In.
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="column"></div>
+</div>
+
+{% endblock %}
+Now when we visit the /sign_up path we will actually see a form.
+
+Handling Form Submission
+When we fill out our sign up form and submit it right now we're met with a 405 error stating "Method Not Allowed". This is because the form submission is making a POST request to the /sign_up path, but our route by default only specifies that it handles GET requests. We're going to have the same function handle both. Depending on the request, type we'll either render the form, create a user and log them in, or hit an error when creating the user and re-render the form with those errors displayed. Here's what our finally sign_up view looks like:
+
+notes/__init__.py:
+
+import os
+
+from flask import Flask, render_template, redirect, url_for, request, flash
+from flask_migrate import Migrate
+from werkzeug.security import generate_password_hash
+
+def create_app(test_config=None):
+    # Initial setup omitted
+
+    from .models import db, User
+
+    db.init_app(app)
+    migrate = Migrate(app, db)
+
+    @app.route('/sign_up', methods=('GET', 'POST'))
+    def sign_up():
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            error = None
+
+            if not username:
+                error = 'Username is required.'
+            elif not password:
+                error = 'Password is required.'
+            elif User.query.filter_by(username=username).first():
+                error = 'Username is already taken.'
+
+            if error is None:
+                user = User(username=username, password=password)
+                db.session.add(user)
+                db.session.commit()
+                flash("Successfully signed up! Please log in.", 'success')
+                return redirect(url_for('log_in'))
+
+            flash(error, 'error')
+
+        return render_template('sign_up.html')
+
+    @app.route('/log_in')
+    def log_in():
+        return "Login"
+
+    return app
+We did quite a bit here! First, we had to import a few more helper functions from Flask. Here's what each of them does:
+
+redirect - Allows us to do an HTTP redirect so that the browser is redirected to a different URL
+url_for - The same helper that we're using in the template files, allowing us to get the route for a given view function
+request - Gives us access to the request information that the server received to trigger the view:
+In this case, we get access to the method to know if the form was submitted, and the form attribute to see what the user submitted.
+flash - Allows us to populate a list of messages to display based on what happened in the view:
+Our base template renders these with a variety of styles by using the get_flashed_messages template function.
+werkzeug.security.generate_password_hash - Werkzeug is a WSGI helper library that Flask uses behind the scenes. It provides some useful utilities. In this case, we're loading the generate_password_hash function from the security module, so that we're storing an encrypted version of the password for the User instead of the plain text version.
+Once we've imported all of these new functions, we need to also pull in our User class so that we can create a new instance and store it assuming that the form was filled out correctly. We add some conditional validation logic to check for potential errors. Take note of the third elif where we check to see if there is already a user with the given username. If there are no issues, then we finally get to create an instance of User (with a hashed password) and store it in the database by using db.session.add(user) and then db.session.commit(). No SQL statements are run until we run db.session.commit().
+
+Lastly, we redirect the user to /log_in so that they can attempt to sign in. We did need to create the log_in view and route so that url_for won't raise an error for a missing route, but we just have it return a string for now. Go ahead and create a user, navigate back to /sign_up, and try to create the same user.
+
+We'll continue with user authentication in the next lecture.
