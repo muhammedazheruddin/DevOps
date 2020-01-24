@@ -11,9 +11,9 @@
 $
 
 # Command Line History (newest to oldest):
+:q
 :wq
 :q!
-:q
 :Q!
 :wq!
 
@@ -29,18 +29,26 @@ $
 # Registers:
 
 # File marks:
-'0  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
-'1  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
-'2  27  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
-'3  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/export.py
-'4  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/user.py
-'5  9  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
-'6  22  0  ~/python/CLI_SETUP/Lab/hr/setup.py
-'7  8  90  ~/python/CLI_SETUP/BuildingCLI.txt
-'8  1  7  ~/projects/pgbackup/README.md
-'9  16  0  ~/projects/pgbackup/setup.py
+'0  6  16  ~/.env
+'1  11  92  ~/config.py
+'2  2  19  ~/.env
+'3  1  0  ~/python/WebDev/projects/notes/config.py
+'4  17  0  ~/python/WebDev/projects/notes/__init__.py
+'5  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
+'6  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
+'7  27  0  ~/python/CLI_SETUP/Lab/hr/src/hr/cli.py
+'8  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/export.py
+'9  15  0  ~/python/CLI_SETUP/Lab/hr/src/hr/user.py
 
 # Jumplist (newest first):
+-'  6  16  ~/.env
+-'  11  92  ~/config.py
+-'  2  19  ~/.env
+-'  1  0  ~/.env
+-'  1  0  ~/config.py
+-'  1  0  ~/python/WebDev/projects/notes/config.py
+-'  17  0  ~/python/WebDev/projects/notes/__init__.py
+-'  1  0  ~/python/WebDev/projects/notes/__init__.py
 -'  17  34  ~/python/CLI_SETUP/Lab/hr/setup.py
 -'  18  12  ~/python/CLI_SETUP/Lab/hr/setup.py
 -'  22  0  ~/python/CLI_SETUP/Lab/hr/setup.py
@@ -130,16 +138,44 @@ $
 -'  1  0  ~/python/IDE_Pickeing.txt
 -'  42  29  ~/python/install_ubuntu.txt
 -'  1  0  ~/python/install_ubuntu.txt
--'  43  0  ~/python/install.txt
--'  1  0  ~/python/install.txt
--'  220  0  ~/CI-CD/orchestration/lab.txt
--'  1  0  ~/CI-CD/orchestration/lab.txt
--'  62  0  ~/CI-CD/orchestration/intro.txt
--'  45  0  ~/CI-CD/orchestration/intro.txt
--'  40  0  ~/CI-CD/orchestration/intro.txt
--'  1  0  ~/CI-CD/orchestration/intro.txt
 
 # History of marks within files (newest to oldest):
+
+> ~/.env
+	"	6	16
+	^	6	17
+	.	6	17
+	+	1	1
+	+	6	21
+	+	2	19
+	+	1	19
+	+	2	17
+	+	3	14
+	+	4	15
+	+	5	17
+	+	6	17
+
+> ~/config.py
+	"	11	92
+	^	11	93
+	.	11	92
+	+	1	9
+	+	4	51
+	+	5	54
+	+	6	54
+	+	7	50
+	+	11	92
+
+> ~/python/WebDev/projects/notes/config.py
+	"	1	0
+
+> ~/python/WebDev/projects/notes/__init__.py
+	"	17	0
+	^	17	0
+	.	10	0
+	+	3	23
+	+	17	0
+	+	10	0
 
 > ~/python/CLI_SETUP/Lab/hr/setup.py
 	"	17	34

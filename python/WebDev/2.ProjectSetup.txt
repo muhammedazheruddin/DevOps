@@ -1,0 +1,44 @@
+Project Setup:
+=======================
+
+Our first step in building a web application (or any application really) is to set up the basic project structure. In this lesson, we'll set up our Flask application and the database that we'll use while developing.
+
+Documentation For This Video
+Flask - http://flask.pocoo.org/
+Pipenv - https://pipenv.readthedocs.io/en/latest/
+Markdown - https://daringfireball.net/projects/markdown/syntax
+
+Our Application: Markdown Notes
+For this portion of the course, we're going to be building a note-taking application that allows us to write notes using Markdown. Ideally, this application would be great for storing code snippets with some notes about what we were doing and how the code works.
+
+The Basic Directory Structure
+Being a micro-framework, Flask doesn't have a lot of opinions about how we structure our project. Because of this, we're going to keep it as simple as we can and to start, we won't have many directories at all. Here are the things that we want to create:
+
+Pipfile (via pipenv install) - To specify our Python version and dependencies
+/templates - To eventually hold Jinja templates that we'll use to render HTML
+/static - To hold static assets like HTML, CSS, and JavaScript files
+Let's create these things:
+
+$ cd ~/projects
+$ mkdir notes
+$ cd notes
+$ pipenv --python python3.7 install flask
+...
+$ pipenv shell
+(notes) $ mkdir templates static
+(notes) $ touch {templates,static}/.gitkeep
+For right now that's all we need to set up. Let's pull down a reasonable gitignore from Github and write our initial commit.
+
+(notes) $ curl -o .gitignore https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore
+(notes) $ git init
+Initialized empty Git repository in /home/cloud_user/projects/notes/.git/
+(notes) $ git add --all .
+(notes) $ git commit -m 'Initial commit'
+[master (root-commit) ef81eca] Initial commit
+ 5 files changed, 218 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 Pipfile
+ create mode 100644 Pipfile.lock
+ create mode 100644 static/.gitkeep
+ create mode 100644 templates/.gitkeep Now we have the basic directory structure that we want for our application to 
+start with and we're ready to start developing.

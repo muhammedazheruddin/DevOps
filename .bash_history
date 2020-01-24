@@ -574,3 +574,84 @@ ls
 nano instruction.txt
 ls
 cd
+git add --all .
+git status
+git commit -m 'fourth commit from LinuxAcademy'
+git push -u origin master
+cd python/
+ls
+mkdir WebDev
+cd WebDev/
+ls
+nano VisualizingWebDev.txt
+mv VisualizingWebDev.txt 1.VisualizingWebDev.txt
+ls
+nano 2.ProjectSetup.txt
+cd python/WebDev/
+ls
+nano 2.ProjectSetup.txt
+ls
+mkdir projects
+mkdir notes
+cd projects/
+mkdir notes
+cd notes
+pipenv --python python3.7
+pipenv install flask
+pipenv --python python3.7 install flask
+pipenv shell
+ . /home/cloud_user/.local/share/virtualenvs/notes-uMEkZ5vJ/bin/activate
+mkdir templates static
+ls
+touch {templates,static}/.gitkeep
+curl -o .gitignore https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore
+git init
+git add --all .
+git commit -m 'flask installation'
+vim __init__.py
+export FLASK_ENV=development
+export FLASK_APP='.'
+flask run --host=0.0.0.0 --port=3000
+docker ps
+vim config.py
+vim .env
+sorce .env
+source .ence
+source .env
+vim .env
+source .env
+flask run --host=0.0.0.0 --port=3000
+vim config.py 
+vim .env
+cd python/
+ls
+cd WebDev/
+ls
+cd projects
+cd notes/
+pwd
+mv ~/config.py export DB_USERNAME='demo'
+  2 export DB_PASSWORD='secure_password'
+  3 export DB_HOST='15.206.164.141'
+  4 export DB_PORT='80'
+  5 export FLASK_ENV='development'
+  6 export FLASK_APP='.'
+mv ~/config.py /home/cloud_user/python/WebDev/projects/notes/config.py
+ . /home/cloud_user/.local/share/virtualenvs/notes-uMEkZ5vJ/bin/activate
+ls
+cat config.py 
+mv ~/.env /home/cloud_user/python/WebDev/projects/notes/.env
+ls
+source .env
+flask run --host=0.0.0.0 --port=3000
+pipenv install --dev python-dotenv
+flask run --host=0.0.0.0 --port=3000
+git log
+git status
+git add --all .
+git commit -m 'Create initial flask app'
+cd
+exit
+pipenv shell
+cd
+ls

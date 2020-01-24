@@ -1,0 +1,1 @@
+{"__format__": 1, "dependencies": {"click": {"7.0": []}, "flask": {"1.1.1": ["click>=5.1", "itsdangerous>=0.24", "jinja2>=2.10.1", "werkzeug>=0.15"]}, "itsdangerous": {"1.1.0": []}, "jinja2": {"2.10.3": ["markupsafe>=0.23"]}, "markupsafe": {"1.1.1": []}, "python-dotenv": {"0.10.5": []}, "werkzeug": {"0.16.0": []}}}
