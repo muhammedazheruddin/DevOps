@@ -765,3 +765,43 @@ ls
 cd
 git add --all .
 git push -u origin master
+git add --all .
+git commit -m "seventh push LA.com"
+git push -u origin master
+pipenv shell
+ . /home/cloud_user/.local/share/virtualenvs/notes-uMEkZ5vJ/bin/activate
+flask db init
+vim .env
+flask db init
+vim .env
+flask db init
+vun __init__.py 
+vim __init__.py 
+vim __
+vim __init__.py 
+flask run --host=0.0.0.0 --port=3000
+cd python/WebDev/
+ls
+mkdir lab
+cd lab/
+nano lab.txt
+ls
+nano lab.txt
+pipenv --python=$(which python3.7) install flask
+ . /home/cloud_user/.local/share/virtualenvs/lab-ibrRGjqi/bin/activate
+vim __init__.py
+export FLASK_ENV=develoment
+export FLASK_APP='x'
+export FLASK_APP='.'
+flask run --host=0.0.0.0 --port=3000
+export FLASK_ENV=develoment
+flask run --host=0.0.0.0 --port=3000
+cd ..
+exit
+pipenv shell
+cd ..
+ls
+vi 12_next_steps.txt
+ls
+vi 12_next_steps.txt
+cd

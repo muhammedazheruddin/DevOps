@@ -11,9 +11,9 @@
 $
 
 # Command Line History (newest to oldest):
+:wq
 :q!
 :q
-:wq
 :wq!
 :e config.py
 :e vim config.py
@@ -33,18 +33,22 @@ $
 # Registers:
 
 # File marks:
-'0  234  957  ~/python/WebDev/7.CRUD_Operation.txt
-'1  28  0  ~/python/WebDev/6.UserAuthentication.txt
-'2  1  0  ~/python/WebDev/6.
-'3  6  7  ~/python/WebDev/projects/notes/models.py
-'4  11  22  ~/python/WebDev/projects/notes/config.py
-'5  3  29  ~/python/WebDev/projects/notes/.env
-'6  6  18  ~/python/WebDev/projects/notes/.env
-'7  3  39  ~/python/WebDev/projects/notes/__init__.py
-'8  1  0  ~/python/WebDev/projects/notes/__
-'9  5  51  ~/python/WebDev/projects/notes/config.py
+'0  11  0  ~/python/12_next_steps.txt
+'1  1  0  ~/python/12_next_steps.txt
+'2  16  13  ~/python/WebDev/lab/__init__.py
+'3  234  957  ~/python/WebDev/7.CRUD_Operation.txt
+'4  28  0  ~/python/WebDev/6.UserAuthentication.txt
+'5  1  0  ~/python/WebDev/6.
+'6  6  7  ~/python/WebDev/projects/notes/models.py
+'7  11  22  ~/python/WebDev/projects/notes/config.py
+'8  3  29  ~/python/WebDev/projects/notes/.env
+'9  6  18  ~/python/WebDev/projects/notes/.env
 
 # Jumplist (newest first):
+-'  11  0  ~/python/12_next_steps.txt
+-'  1  0  ~/python/12_next_steps.txt
+-'  16  13  ~/python/WebDev/lab/__init__.py
+-'  1  0  ~/python/WebDev/lab/__init__.py
 -'  234  957  ~/python/WebDev/7.CRUD_Operation.txt
 -'  1  0  ~/python/WebDev/7.CRUD_Operation.txt
 -'  28  0  ~/python/WebDev/6.UserAuthentication.txt
@@ -139,13 +143,25 @@ $
 -'  1  0  ~/python/working_with_dictionaries.txt
 -'  38  95  ~/python/working_with_tuples.txt
 -'  1  0  ~/python/working_with_tuples.txt
--'  105  38  ~/python/working_with_lists.txt
--'  1  0  ~/python/working_with_lists.txt
--'  33  6  ~/python/working_with_variables.txt
--'  1  0  ~/python/working_with_variables.txt
--'  13  176  ~/python/working_with_boolean.txt
 
 # History of marks within files (newest to oldest):
+
+> ~/python/12_next_steps.txt
+	"	11	0
+	^	11	0
+	.	10	0
+	+	12	100
+	+	1	0
+	+	6	37
+	+	5	30
+	+	7	28
+	+	10	0
+
+> ~/python/WebDev/lab/__init__.py
+	"	16	13
+	^	16	14
+	.	16	13
+	+	16	13
 
 > ~/python/WebDev/7.CRUD_Operation.txt
 	"	234	957

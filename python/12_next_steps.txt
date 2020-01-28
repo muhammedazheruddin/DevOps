@@ -1,0 +1,12 @@
+Thank you for taking the time to go through this course! I hope that you learned a lot and I want to hear about it. If you could please take a moment to rate the course, it will help me know what is working and what is not. Now that you have a solid programming foundation with Python, there are a lot of doors open to you to continue your learning.
+
+Here are some courses that I think you should consider taking that would leverage your knowledge of Python while teaching you something new:
+
+Google App Engine Deep Dive - https://linuxacademy.com/cp/modules/view/id/167
+Google Kubernetes Engine Deep Dive - https://linuxacademy.com/cp/modules/view/id/167
+Cloud Functions Deep Dive - https://linuxacademy.com/cp/modules/view/id/186
+AWS Lambda Deep Dive - https://linuxacademy.com/cp/modules/view/id/204
+
+
+
+Remember that programming is a skill and it needs to be practiced so find problems to solve and push yourself. Let me know what you build in the community.
