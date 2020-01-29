@@ -805,3 +805,33 @@ vi 12_next_steps.txt
 ls
 vi 12_next_steps.txt
 cd
+git add --all .
+git commit -m "commit from LA 29-01-2020"
+git push -u origin master
+mkdir php7
+cd p
+cd php7/
+sudo yum update
+sudo yum install httpd
+sudo systemctl start httpd.service
+sudo systemctl enable httpd.service
+sudo yum install mariadb-server mariadb
+sudo systemctl start mariadb
+yum load-transaction /tm/yum_save_tx.20250-01-29.11-06.dWAbG4.yumtx
+yum load-transaction /tmp/yum_save_tx.20250-01-29.11-06.dWAbG4.yumtx
+sudo yum load-transaction /tmp/yum_save_tx.20250-01-29.11-06.dWAbG4.yumtx
+sudo yum install mariadb-server mariadb
+sudo systemctl start mariadb
+sudo mysql_secure_installation
+sudo systemctl enable mariadb.service
+sudo yum install php php-mysql
+sudo systemctl restart httpd.service 
+sudo yum install nano
+sudo nano /var/www/html/info.php
+sudo firewall-cmd --permanent --zone=public --add-service=http
+yum search php-
+sudo systemctl restart apache2
+sudo systemctl restart httpd.service 
+sudo systemctl enable httpd.service
+clear
+cd ..
